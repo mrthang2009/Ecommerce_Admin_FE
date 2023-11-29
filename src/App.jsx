@@ -35,26 +35,32 @@ const App = () => {
 
   // Hàm để giải mã token và thiết lập decodedPayload
   const getDecodedPayload = () => {
+    console.log("««««« token »»»»»", token);
     if (token && !hasDecodedToken) {
       // Giải mã token chỉ khi token tồn tại và chưa giải mã
       // Thiết lập token cho axiosClient để gửi trong mọi yêu cầu
       axiosClient.defaults.headers.Authorization = `Bearer ${token}`;
       const decodedPayload = decodeToken(token); // Sử dụng hàm decodeToken để giải mã token
+      console.log("««««« decodedPayload »»»»»", decodedPayload);
       if (decodedPayload) {
         setDecodedPayload(decodedPayload);
         setHasDecodedToken(true); // Đánh dấu rằng đã giải mã token
-      } else {
-        // Nếu không thể giải mã token, điều hướng đến trang đăng nhập
-        navigate("/login");
       }
     } else if (!token) {
       // Nếu không có token, điều hướng đến trang đăng nhập
       navigate("/login");
+      setHasDecodedToken(false);
     }
   };
 
   // Sử dụng useEffect để gọi getDecodedPayload khi component được render
-  useEffect(getDecodedPayload, [navigate, token, hasDecodedToken]);
+  useEffect(getDecodedPayload, [
+    navigate,
+    token,
+    hasDecodedToken,
+    decodedPayload,
+  ]);
+  console.log("««««« decodedPayload »»»»»", decodedPayload);
   return (
     <>
       <Routes>

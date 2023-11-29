@@ -1,22 +1,25 @@
 import { Form, Input, Button, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import axiosClient from "../libraries/axiosClient";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import styles from "./stylesPage/LoginPage.module.scss";
 import { useState } from "react";
 
 const LoginForm = () => {
   const [form] = Form.useForm();
-
-  const navigate = useNavigate();
   //Trạng thái loading của button
   const [loadings, setLoadings] = useState([false]);
 
-  const [isLoggedIn, setLoggedIn] = useState(
-    Boolean(localStorage.getItem("TOKEN"))
-  );
+  const navigate = useNavigate();
+  // Lấy biến token từ nơi bạn đã lưu trữ nó nếu có
+  const token = localStorage.getItem("TOKEN");
+  useEffect(() => {
+    if (token) {
+      navigate("/");
+    }
+  }, [navigate, token]);
 
-  const onFinish = useCallback(async (values) => {
+  const onFinish = async (values) => {
     try {
       setLoadings([true]);
       // Gửi yêu cầu đăng nhập đến máy chủ
@@ -31,7 +34,7 @@ const LoginForm = () => {
       axiosClient.defaults.headers.Authorization = `Bearer ${token}`;
 
       if (token) {
-        setLoggedIn(true); // Cập nhật trạng thái đăng nhập
+        navigate("/"); // Chuyển hướng đến trang chính sau khi đăng nhập thành công
         message.success("Đăng nhập thành công!"); // Hiển thị thông báo đăng nhập thành công
       } else {
         message.warning(
@@ -43,22 +46,10 @@ const LoginForm = () => {
       console.error("Lỗi đăng nhập:", error);
       setLoadings([false]);
     }
-  }, []);
-
+  };
   const onFinishFailed = (errorInfo) => {
     console.log("Thất bại:", errorInfo);
   };
-
-  useEffect(() => {
-    // Lấy biến token từ nơi bạn đã lưu trữ nó nếu có
-    const token = localStorage.getItem("TOKEN");
-
-    if (token) {
-      navigate("/");
-    } else {
-      navigate("/login");
-    }
-  }, [navigate, isLoggedIn]); // Thêm isLoggedIn vào dependency để theo dõi sự thay đổi của trạng thái đăng nhập
 
   return (
     <div className="login-container">
