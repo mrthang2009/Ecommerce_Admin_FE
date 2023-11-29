@@ -16,6 +16,8 @@ const LoginForm = () => {
   useEffect(() => {
     if (token) {
       navigate("/");
+    } else {
+      navigate("/login");
     }
   }, [navigate, token]);
 
