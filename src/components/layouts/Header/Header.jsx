@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import styles from "./Header.module.scss";
 import Navigation from "../../Navigation/Navigation";
@@ -12,12 +13,15 @@ const Header = ({ typeRole, avatar, last_name }) => {
   const toggleNavVisibility = () => {
     setNavVisible(!navVisible);
   };
+   // Sử dụng useNavigate để điều hướng trang
+   const navigate = useNavigate();
   const handleLogout = () => {
     // Xóa token và refreshToken từ localStorage
     localStorage.removeItem("TOKEN");
     localStorage.removeItem("REFRESH_TOKEN");
     // Điều hướng người dùng đến trang đăng nhập
-    window.location.href = "/login";
+    // window.location.href = "/login";
+    navigate("/login");
   };
   const items = [
     {
