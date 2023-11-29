@@ -60,7 +60,7 @@ const LoginForm = () => {
 
   useEffect(() => {
     onFinish();
-  }, [onFinish, token]);
+  }, [onFinish]);
 
   return (
     <div className="login-container">
