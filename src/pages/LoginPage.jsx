@@ -7,26 +7,14 @@ import { useState } from "react";
 
 const LoginForm = () => {
   const [form] = Form.useForm();
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
   //Trạng thái loading của button
   const [loadings, setLoadings] = useState([false]);
 
   const [isLoggedIn, setLoggedIn] = useState(
     Boolean(localStorage.getItem("TOKEN"))
   );
-
-  // Khi đăng nhập thành công
-  setLoggedIn(true);
-
-  // Khi cần kiểm tra trạng thái đăng nhập
-  if (isLoggedIn) {
-    navigate("/");
-  } else {
-    navigate("/login");
-  }
-
-
 
   const onFinish = useCallback(async (values) => {
     try {
@@ -43,7 +31,7 @@ const LoginForm = () => {
       axiosClient.defaults.headers.Authorization = `Bearer ${token}`;
 
       if (token) {
-        navigate("/"); // Chuyển hướng đến trang chính sau khi đăng nhập thành công
+        setLoggedIn(true); // Cập nhật trạng thái đăng nhập
         message.success("Đăng nhập thành công!"); // Hiển thị thông báo đăng nhập thành công
       } else {
         message.warning(
@@ -61,14 +49,16 @@ const LoginForm = () => {
     console.log("Thất bại:", errorInfo);
   };
 
-  // Lấy biến token từ nơi bạn đã lưu trữ nó nếu có
-  let token = localStorage.getItem("TOKEN");
-  console.log("««««« token »»»»»", token);
   useEffect(() => {
+    // Lấy biến token từ nơi bạn đã lưu trữ nó nếu có
     const token = localStorage.getItem("TOKEN");
-    setLoggedIn(Boolean(token));
-  }, []); // Chỉ chạy một lần khi component được tạo
-  
+
+    if (token) {
+      navigate("/");
+    } else {
+      navigate("/login");
+    }
+  }, [navigate, isLoggedIn]); // Thêm isLoggedIn vào dependency để theo dõi sự thay đổi của trạng thái đăng nhập
 
   return (
     <div className="login-container">
