@@ -98,7 +98,6 @@ const Navigation = ({ role }) => {
   ];
 
   const location = useLocation(); // Lấy thông tin đường dẫn hiện tại
-  console.log("««««« location  »»»»»", location);
   const isUserProfilePage =
     location.pathname === "/account" ||
     location.pathname === "/change-password";

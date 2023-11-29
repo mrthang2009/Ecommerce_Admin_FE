@@ -13,12 +13,6 @@ const LoginForm = () => {
   const navigate = useNavigate();
   // Lấy biến token từ nơi bạn đã lưu trữ nó nếu có
   const token = localStorage.getItem("TOKEN");
-  useEffect(() => {
-    console.log('««««« token »»»»»', token);
-    // if (token) {
-      navigate("/");
-    // }
-  }, [navigate, token]);
 
   const onFinish = async (values) => {
     try {
@@ -48,6 +42,13 @@ const LoginForm = () => {
       setLoadings([false]);
     }
   };
+
+  useEffect(() => {
+    console.log("««««« token »»»»»", token);
+    // if (token) {
+    navigate("/");
+    // }
+  }, [navigate, token]);
   const onFinishFailed = (errorInfo) => {
     console.log("Thất bại:", errorInfo);
   };
