@@ -20,7 +20,6 @@ const Header = ({ typeRole, avatar, last_name }) => {
     localStorage.removeItem("TOKEN");
     localStorage.removeItem("REFRESH_TOKEN");
     // Điều hướng người dùng đến trang đăng nhập
-    // window.location.href = "/login";
     navigate("/login");
   };
   const items = [

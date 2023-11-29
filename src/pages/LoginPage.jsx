@@ -15,9 +15,9 @@ const LoginForm = () => {
   const token = localStorage.getItem("TOKEN");
   useEffect(() => {
     console.log('««««« token »»»»»', token);
-    if (token) {
+    // if (token) {
       navigate("/");
-    }
+    // }
   }, [navigate, token]);
 
   const onFinish = async (values) => {
