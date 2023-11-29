@@ -58,10 +58,6 @@ const LoginForm = () => {
     }
   }, [navigate, token]);
 
-  useEffect(() => {
-    onFinish();
-  }, [onFinish]);
-
   return (
     <div className="login-container">
       <Form
