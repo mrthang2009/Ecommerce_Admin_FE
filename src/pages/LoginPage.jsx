@@ -7,11 +7,26 @@ import { useState } from "react";
 
 const LoginForm = () => {
   const [form] = Form.useForm();
+  const navigate = useNavigate();
 
   //Trạng thái loading của button
   const [loadings, setLoadings] = useState([false]);
 
-  const navigate = useNavigate();
+  const [isLoggedIn, setLoggedIn] = useState(
+    Boolean(localStorage.getItem("TOKEN"))
+  );
+
+  // Khi đăng nhập thành công
+  setLoggedIn(true);
+
+  // Khi cần kiểm tra trạng thái đăng nhập
+  if (isLoggedIn) {
+    navigate("/");
+  } else {
+    navigate("/login");
+  }
+
+
 
   const onFinish = useCallback(async (values) => {
     try {
@@ -50,13 +65,10 @@ const LoginForm = () => {
   let token = localStorage.getItem("TOKEN");
   console.log("««««« token »»»»»", token);
   useEffect(() => {
-    console.log("««««« token »»»»»", token);
-    if (token) {
-      navigate("/");
-    } else {
-      navigate("/login");
-    }
-  }, [navigate, token]);
+    const token = localStorage.getItem("TOKEN");
+    setLoggedIn(Boolean(token));
+  }, []); // Chỉ chạy một lần khi component được tạo
+  
 
   return (
     <div className="login-container">
