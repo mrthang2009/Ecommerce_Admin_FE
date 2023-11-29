@@ -1,7 +1,7 @@
 import { Form, Input, Button, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import axiosClient from "../libraries/axiosClient";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import styles from "./stylesPage/LoginPage.module.scss";
 import { useState } from "react";
 
@@ -13,7 +13,7 @@ const LoginForm = () => {
 
   const navigate = useNavigate();
 
-  const onFinish = async (values) => {
+  const onFinish = useCallback(async (values) => {
     try {
       setLoadings([true]);
       // Gửi yêu cầu đăng nhập đến máy chủ
@@ -40,7 +40,7 @@ const LoginForm = () => {
       console.error("Lỗi đăng nhập:", error);
       setLoadings([false]);
     }
-  };
+  }, []);
 
   const onFinishFailed = (errorInfo) => {
     console.log("Thất bại:", errorInfo);
@@ -48,7 +48,7 @@ const LoginForm = () => {
 
   // Lấy biến token từ nơi bạn đã lưu trữ nó nếu có
   let token = localStorage.getItem("TOKEN");
-  console.log('««««« token »»»»»', token);
+  console.log("««««« token »»»»»", token);
   useEffect(() => {
     console.log("««««« token »»»»»", token);
     if (token) {
@@ -57,6 +57,10 @@ const LoginForm = () => {
       navigate("/login");
     }
   }, [navigate, token]);
+
+  useEffect(() => {
+    onFinish();
+  }, [onFinish, token]);
 
   return (
     <div className="login-container">
