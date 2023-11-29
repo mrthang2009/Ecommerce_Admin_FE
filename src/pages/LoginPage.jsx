@@ -10,11 +10,18 @@ const LoginForm = () => {
 
   //Trạng thái loading của button
   const [loadings, setLoadings] = useState([false]);
-  const [isToken, setIsToken] = useState(null);
 
   const navigate = useNavigate();
   // Lấy biến token từ nơi bạn đã lưu trữ nó nếu có
-  setIsToken(localStorage.getItem("TOKEN"));
+  let token = localStorage.getItem("TOKEN");
+  useEffect(() => {
+    console.log("««««« token »»»»»", token);
+    if (token) {
+      navigate("/");
+    } else {
+      navigate("/login");
+    }
+  }, [navigate, token]);
 
   const onFinish = async (values) => {
     try {
@@ -45,11 +52,6 @@ const LoginForm = () => {
     }
   };
 
-  useEffect(() => {
-    if (isToken) {
-      navigate("/");
-    }
-  }, [navigate, isToken]);
   const onFinishFailed = (errorInfo) => {
     console.log("Thất bại:", errorInfo);
   };
