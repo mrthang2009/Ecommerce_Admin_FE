@@ -1,0 +1,19 @@
+.chartContainer {
+    width: 0%;
+    height: 80vh;
+    margin-bottom: 20px;
+}
+.title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .action {
+        display: flex;
+        align-items: center;
+
+        p {
+            margin-right: 6px;
+        }
+    }
+}
