@@ -7,12 +7,13 @@ import { useState } from "react";
 
 const LoginForm = () => {
   const [form] = Form.useForm();
+
   //Trạng thái loading của button
   const [loadings, setLoadings] = useState([false]);
 
   const navigate = useNavigate();
   // Lấy biến token từ nơi bạn đã lưu trữ nó nếu có
-  const token = localStorage.getItem("TOKEN");
+  let token = localStorage.getItem("TOKEN");
 
   const onFinish = async (values) => {
     try {
@@ -45,9 +46,9 @@ const LoginForm = () => {
 
   useEffect(() => {
     console.log("««««« token »»»»»", token);
-    // if (token) {
+    if (token) {
     navigate("/");
-    // }
+    }
   }, [navigate, token]);
   const onFinishFailed = (errorInfo) => {
     console.log("Thất bại:", errorInfo);
