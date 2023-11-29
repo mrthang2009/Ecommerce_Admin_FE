@@ -48,6 +48,7 @@ const LoginForm = () => {
 
   // Lấy biến token từ nơi bạn đã lưu trữ nó nếu có
   let token = localStorage.getItem("TOKEN");
+  console.log('««««« token »»»»»', token);
   useEffect(() => {
     console.log("««««« token »»»»»", token);
     if (token) {
