@@ -12,16 +12,6 @@ const LoginForm = () => {
   const [loadings, setLoadings] = useState([false]);
 
   const navigate = useNavigate();
-  // Lấy biến token từ nơi bạn đã lưu trữ nó nếu có
-  let token = localStorage.getItem("TOKEN");
-  useEffect(() => {
-    console.log("««««« token »»»»»", token);
-    if (token) {
-      navigate("/");
-    } else {
-      navigate("/login");
-    }
-  }, [navigate, token]);
 
   const onFinish = async (values) => {
     try {
@@ -55,6 +45,17 @@ const LoginForm = () => {
   const onFinishFailed = (errorInfo) => {
     console.log("Thất bại:", errorInfo);
   };
+
+  // Lấy biến token từ nơi bạn đã lưu trữ nó nếu có
+  let token = localStorage.getItem("TOKEN");
+  useEffect(() => {
+    console.log("««««« token »»»»»", token);
+    if (token) {
+      navigate("/");
+    } else {
+      navigate("/login");
+    }
+  }, [navigate, token]);
 
   return (
     <div className="login-container">
