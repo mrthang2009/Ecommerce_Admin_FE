@@ -4,6 +4,7 @@ import axiosClient from "../libraries/axiosClient";
 import { useEffect } from "react";
 import styles from "./stylesPage/LoginPage.module.scss";
 import { useState } from "react";
+import { Helmet } from "react-helmet";
 
 const LoginForm = () => {
   const [form] = Form.useForm();
@@ -54,75 +55,72 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="login-container">
-      <Form
-        form={form}
-        name="basic"
-        wrapperCol={{
-          span: 24,
-        }}
-        initialValues={{
-          remember: false,
-        }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-      >
-        <Form.Item
-          name="email"
-          style={{ marginBottom: "15px" }}
-          autoComplete="off" // Tắt gợi ý nhập tự động
-          rules={[
-            {
-              required: true,
-              message: "Vui lòng nhập địa chỉ email!",
-            },
-            {
-              type: "email",
-              message: "Định dạng email không hợp lệ!",
-            },
-          ]}
+    <>
+      <Helmet>
+        <title>Đăng nhập</title>
+      </Helmet>
+      <div className="login-container">
+        <Form
+          form={form}
+          name="basic"
+          wrapperCol={{
+            span: 24,
+          }}
+          initialValues={{
+            remember: false,
+          }}
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
         >
-          <Input placeholder="Nhập địa chỉ email của bạn" />
-        </Form.Item>
-
-        <Form.Item
-          name="password"
-          style={{ marginBottom: "15px" }}
-          autoComplete="off" // Tắt gợi ý nhập tự động
-          rules={[
-            {
-              required: true,
-              message: "Vui lòng nhập mật khẩu của bạn!",
-            },
-          ]}
-        >
-          <Input.Password placeholder="Nhập mật khẩu của bạn" />
-        </Form.Item>
-
-        {/* <Form.Item
-          name="remember"
-          valuePropName="checked"
-          style={{ marginBottom: "15px" }}
-        >
-          <Checkbox>Ghi nhớ tôi</Checkbox>{" "}
-        </Form.Item> */}
-
-        <Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            style={{
-              width: "60%",
-              backgroundColor: "#E31837",
-              color: "#ffffff",
-            }}
-            loading={loadings[0]}
+          <Form.Item
+            name="email"
+            style={{ marginBottom: "15px" }}
+            autoComplete="off" // Tắt gợi ý nhập tự động
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng nhập địa chỉ email!",
+              },
+              {
+                type: "email",
+                message: "Định dạng email không hợp lệ!",
+              },
+            ]}
           >
-            Đăng nhập
-          </Button>
-        </Form.Item>
-      </Form>
-    </div>
+            <Input placeholder="Nhập địa chỉ email của bạn" />
+          </Form.Item>
+
+          <Form.Item
+            name="password"
+            style={{ marginBottom: "15px" }}
+            autoComplete="off" // Tắt gợi ý nhập tự động
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng nhập mật khẩu của bạn!",
+              },
+            ]}
+          >
+            <Input.Password placeholder="Nhập mật khẩu của bạn" />
+          </Form.Item>
+
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              style={{
+                width: "60%",
+                backgroundColor: "#E31837",
+                color: "#ffffff",
+              }}
+              loading={loadings[0]}
+            >
+              Đăng nhập
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
+    </>
   );
 };
 
@@ -135,7 +133,7 @@ const LoginPage = () => {
           alt=""
         />
         <LoginForm />
-        <a href="">Quên mật khẩu?</a>
+        {/* <a href="">Quên mật khẩu?</a> */}
       </div>
     </main>
   );
