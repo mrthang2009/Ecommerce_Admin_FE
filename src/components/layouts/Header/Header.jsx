@@ -4,7 +4,11 @@ import { useNavigate } from "react-router-dom";
 import styles from "./Header.module.scss";
 import Navigation from "../../Navigation/Navigation";
 import { Dropdown } from "antd";
-import { MenuOutlined, DownOutlined } from "@ant-design/icons";
+import {
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  DownOutlined,
+} from "@ant-design/icons";
 
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
@@ -12,10 +16,10 @@ const Header = ({ typeRole, avatar, last_name }) => {
   const [navVisible, setNavVisible] = useState(true);
   const toggleNavVisibility = () => {
     setNavVisible(!navVisible);
-    console.log('««««« navVisible »»»»»', navVisible);
+    console.log("««««« navVisible »»»»»", navVisible);
   };
-   // Sử dụng useNavigate để điều hướng trang
-   const navigate = useNavigate();
+  // Sử dụng useNavigate để điều hướng trang
+  const navigate = useNavigate();
   const handleLogout = () => {
     // Xóa token và refreshToken từ localStorage
     localStorage.removeItem("TOKEN");
@@ -44,9 +48,15 @@ const Header = ({ typeRole, avatar, last_name }) => {
               alt=""
             />
           </Link>
-          <i onClick={toggleNavVisibility}>
-            <MenuOutlined />
-          </i>
+          {!navVisible ? (
+            <i onClick={toggleNavVisibility}>
+              <MenuUnfoldOutlined />
+            </i>
+          ) : (
+            <i onClick={toggleNavVisibility}>
+              <MenuFoldOutlined />
+            </i>
+          )}
         </div>
         <>
           <Dropdown
@@ -64,7 +74,7 @@ const Header = ({ typeRole, avatar, last_name }) => {
           </Dropdown>
         </>
       </div>
-      
+
       <nav className={`${styles.nav} ${navVisible ? styles.navVisible : ""}`}>
         <Navigation role={typeRole} />
       </nav>

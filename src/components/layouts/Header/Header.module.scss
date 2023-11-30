@@ -25,6 +25,10 @@ header {
                 }
 
             }
+
+            i {
+                font-size: 150%;
+            }
         }
 
         .header_right {
@@ -70,15 +74,17 @@ header {
         display: block !important;
 
     }
+
     .navVisible {
         display: none;
     }
+
     .header_left i {
         display: none;
     }
 }
 
-/* CSS cho trạng thái tablet và mobile */
+/* CSS cho trạng thái tablet */
 @media only screen and (max-width: 768px) {
     .nav {
         display: none;
@@ -90,5 +96,18 @@ header {
 
     .header_left i {
         display: block;
+    }
+}
+
+/* CSS cho trạng thái mobile */
+@media only screen and (max-width: 430px) {
+    .header_right {
+
+        p,
+        span {
+            display: none;
+        }
+
+
     }
 }
