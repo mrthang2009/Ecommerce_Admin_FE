@@ -57,20 +57,22 @@ header {
         position: absolute;
         top: 110px;
         left: 10px;
-        display: flex;
         flex-direction: column;
         row-gap: 2.1rem;
+        z-index: 8;
     }
 
 }
 
 
-@media only screen and (max-width: 1440px) {
+@media only screen and (min-width: 769px) {
     .nav {
         display: block !important;
 
     }
-
+    .navVisible {
+        display: none;
+    }
     .header_left i {
         display: none;
     }
@@ -80,6 +82,10 @@ header {
 @media only screen and (max-width: 768px) {
     .nav {
         display: none;
+    }
+
+    .navVisible {
+        display: block !important;
     }
 
     .header_left i {

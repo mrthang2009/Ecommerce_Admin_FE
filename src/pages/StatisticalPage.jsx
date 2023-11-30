@@ -77,19 +77,19 @@ const StatisticalPage = ({ role }) => {
         setChartData(createChartData());
 
         if (role === "MANAGE") {
-          let totalOrders = 0;
-          const totalOnlineOrders = orderCounts.online.reduce(
-            (acc, count) => acc + count,
-            0
-          );
-          const totalOfflineOrders = orderCounts.offline.reduce(
-            (acc, count) => acc + count,
-            0
-          );
-          totalOrders = totalOfflineOrders + totalOnlineOrders;
-          console.log("Total orders for the year:", totalOrders);
-          console.log("Total online orders for the year:", totalOnlineOrders);
-          console.log("Total offline orders for the year:", totalOfflineOrders);
+          // let totalOrders = 0;
+          // const totalOnlineOrders = orderCounts.online.reduce(
+          //   (acc, count) => acc + count,
+          //   0
+          // );
+          // const totalOfflineOrders = orderCounts.offline.reduce(
+          //   (acc, count) => acc + count,
+          //   0
+          // );
+          // const totalOrders = totalOfflineOrders + totalOnlineOrders;
+          // console.log("Total orders for the year:", totalOrders);
+          // console.log("Total online orders for the year:", totalOnlineOrders);
+          // console.log("Total offline orders for the year:", totalOfflineOrders);
 
           const createRevenueData = () =>
             Array.from({ length: 12 }, (_, month) => {

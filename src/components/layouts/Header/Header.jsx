@@ -12,6 +12,7 @@ const Header = ({ typeRole, avatar, last_name }) => {
   const [navVisible, setNavVisible] = useState(true);
   const toggleNavVisibility = () => {
     setNavVisible(!navVisible);
+    console.log('««««« navVisible »»»»»', navVisible);
   };
    // Sử dụng useNavigate để điều hướng trang
    const navigate = useNavigate();
@@ -63,11 +64,10 @@ const Header = ({ typeRole, avatar, last_name }) => {
           </Dropdown>
         </>
       </div>
-      {navVisible && (
-        <nav className={styles.nav}>
-          <Navigation role={typeRole} />
-        </nav>
-      )}
+      
+      <nav className={`${styles.nav} ${navVisible ? styles.navVisible : ""}`}>
+        <Navigation role={typeRole} />
+      </nav>
     </header>
   );
 };
