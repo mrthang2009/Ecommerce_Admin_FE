@@ -110,8 +110,16 @@ const CustomerPage = () => {
       rowScope: "row",
       width: "1%",
       align: "center",
-      responsive: ["md"],
-      render: (text, record, index) => index + 1, // Tạo STT bằng cách sử dụng biến index
+      responsive: ["lg"],
+      render: function (text, record, index) {
+        return (
+          <span>
+            {searchResult.length > 0
+              ? index + 1
+              : index + 1 + pagination.pageSize * (pagination.page - 1)}
+          </span>
+        );
+      },
     },
     {
       title: "Tên khách hàng",

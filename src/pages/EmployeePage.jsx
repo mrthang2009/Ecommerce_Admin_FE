@@ -162,10 +162,14 @@ const EmployeePage = () => {
       rowScope: "row",
       width: "1%",
       align: "center",
-      responsive: ["md"],
+      responsive: ["lg"],
       render: function (text, record, index) {
         return (
-          <span>{index + 1 + pagination.pageSize * (pagination.page - 1)}</span>
+          <span>
+            {searchResult.length > 0
+              ? index + 1
+              : index + 1 + pagination.pageSize * (pagination.page - 1)}
+          </span>
         );
       },
     },

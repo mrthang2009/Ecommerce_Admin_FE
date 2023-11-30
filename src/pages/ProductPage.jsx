@@ -199,7 +199,11 @@ const ProductPage = () => {
       responsive: ["lg"],
       render: function (text, record, index) {
         return (
-          <span>{index + 1 + pagination.pageSize * (pagination.page - 1)}</span>
+          <span>
+            {filterResult.length > 0
+              ? index + 1
+              : index + 1 + pagination.pageSize * (pagination.page - 1)}
+          </span>
         );
       },
     },
@@ -338,10 +342,7 @@ const ProductPage = () => {
           defaultActiveKey={["searchFilter"]}
           style={{ backgroundColor: "#E6F4FF" }}
         >
-          <Panel
-            header="Bộ lọc tìm kiếm sản phẩm"
-            key="searchFilter"
-          >
+          <Panel header="Bộ lọc tìm kiếm sản phẩm" key="searchFilter">
             <div className={styles.filter}>
               <Form>
                 <Row gutter={16}>

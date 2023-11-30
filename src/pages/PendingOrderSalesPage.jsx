@@ -137,9 +137,15 @@ const PendingOrderSalesPage = () => {
       rowScope: "row",
       width: "1%",
       align: "center",
-      responsive: ["xl"],
+      responsive: ["lg"],
       render: function (text, record, index) {
-        return <span>{index + 1}</span>;
+        return (
+          <span>
+            {filterResult.length > 0
+              ? index + 1
+              : index + 1 + pagination.pageSize * (pagination.page - 1)}
+          </span>
+        );
       },
     },
     {
