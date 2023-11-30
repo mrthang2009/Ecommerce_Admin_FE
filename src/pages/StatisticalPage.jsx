@@ -28,7 +28,7 @@ moment.locale("vi");
 
 const StatisticalPage = ({ role }) => {
   const [year, setYear] = useState(new Date().getFullYear());
-  const [month, setMonth] = useState(new Date().getMonth() + 1); // Thêm state cho tháng
+  const [month, setMonth] = useState(new Date().getMonth() + 1);
   const [chartData, setChartData] = useState(null);
   const [revenueData, setRevenueData] = useState(null);
   const [combinedData, setCombinedData] = useState(null);
@@ -36,188 +36,162 @@ const StatisticalPage = ({ role }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (role === "MANAGE") {
-          // Thiết lập ngôn ngữ tiếng Việt cho moment
-          moment.locale("vi");
-          const response = await axiosClient.get(
-            `/orders/orders-by-year?year=${year}`
-          );
-          const orders = response.data.payload;
+        moment.locale("vi");
+        const response = await axiosClient.get(
+          role === "MANAGE"
+            ? `/orders/orders-by-year?year=${year}`
+            : `/orders/orders-by-month?year=${year}&month=${month}`
+        );
+        const orders = response.data.payload;
 
-          // Sử dụng object để lưu trữ số lượng đơn hàng theo từng loại
-          const orderCounts = {
-            total: Array.from({ length: 12 }, () => 0),
-            online: Array.from({ length: 12 }, () => 0),
-            offline: Array.from({ length: 12 }, () => 0),
-          };
-
+        const getOrderCounts = () => {
+          const counts = { total: Array.from({ length: 12 }, () => 0) };
+          if (role === "MANAGE") {
+            counts.online = Array.from({ length: 12 }, () => 0);
+            counts.offline = Array.from({ length: 12 }, () => 0);
+          }
           orders.forEach((order) => {
-            const month = moment(order.createdDate).month();
-            orderCounts.total[month]++;
-
-            // Kiểm tra nếu là đơn hàng online hoặc offline
-            if (order.isOnline) {
-              orderCounts.online[month]++;
-            } else {
-              orderCounts.offline[month]++;
+            const orderMonth = moment(order.createdDate).month();
+            counts.total[orderMonth]++;
+            if (role === "MANAGE") {
+              order.isOnline
+                ? counts.online[orderMonth]++
+                : counts.offline[orderMonth]++;
             }
           });
+          return counts;
+        };
 
-          // Tạo dữ liệu cho biểu đồ đường
-          const chartData = Array.from({ length: 12 }, (_, month) => ({
+        const orderCounts = getOrderCounts();
+
+        const createChartData = () =>
+          Array.from({ length: 12 }, (_, month) => ({
             month: moment().month(month).format("MMMM"),
             total: orderCounts.total[month],
-            online: orderCounts.online[month],
-            offline: orderCounts.offline[month],
+            ...(role === "MANAGE" && {
+              online: orderCounts.online[month],
+              offline: orderCounts.offline[month],
+            }),
           }));
 
-          setChartData(chartData);
+        setChartData(createChartData());
 
-          // Tính lại doanh thu cho từng loại đơn hàng (online và offline)
-          const revenueData = Array.from({ length: 12 }, (_, month) => {
-            const onlineRevenue = orders
-              .filter(
-                (order) =>
-                  moment(order.createdDate).month() === month &&
-                  order.isOnline === true &&
-                  order.status === "COMPLETED"
-              )
-              .reduce((total, order) => {
-                // Tính tổng số tiền của mỗi đơn hàng online
-                const orderTotal = order.productList.reduce(
-                  (orderTotal, product) => {
-                    // Tính số tiền của từng sản phẩm trong đơn hàng
-                    const productTotal =
-                      product.price *
-                      product.quantity *
-                      (1 - product.discount / 100);
-                    // Cộng vào tổng tiền của đơn hàng online
-                    return orderTotal + productTotal;
-                  },
-                  0
-                );
-
-                // Cộng vào tổng doanh thu của đơn hàng online
-                return total + orderTotal;
-              }, 0);
-
-            const offlineRevenue = orders
-              .filter(
-                (order) =>
-                  moment(order.createdDate).month() === month &&
-                  order.isOnline === false &&
-                  order.status === "COMPLETED"
-              )
-              .reduce((total, order) => {
-                // Tính tổng số tiền của mỗi đơn hàng offline
-                const orderTotal = order.productList.reduce(
-                  (orderTotal, product) => {
-                    // Tính số tiền của từng sản phẩm trong đơn hàng
-                    const productTotal =
-                      product.price *
-                      product.quantity *
-                      (1 - product.discount / 100);
-                    // Cộng vào tổng tiền của đơn hàng offline
-                    return orderTotal + productTotal;
-                  },
-                  0
-                );
-
-                // Cộng vào tổng doanh thu của đơn hàng offline
-                return total + orderTotal;
-              }, 0);
-
-            const totalRevenue = onlineRevenue + offlineRevenue;
-
-            return {
-              month: moment().month(month).format("MMMM"),
-              onlineRevenue,
-              offlineRevenue,
-              totalRevenue,
-            };
-          });
-
-          setRevenueData(revenueData);
-        } else if (role === "SALES" || role === "SHIPPER") {
-          moment.locale("vi");
-          const response = await axiosClient.get(
-            `/orders/orders-by-month?year=${year}&month=${month}`
+        if (role === "MANAGE") {
+          let totalOrders = 0;
+          const totalOnlineOrders = orderCounts.online.reduce(
+            (acc, count) => acc + count,
+            0
           );
-          const orders = response.data.payload;
-          // Tạo một mảng chứa tất cả các ngày trong tháng
+          const totalOfflineOrders = orderCounts.offline.reduce(
+            (acc, count) => acc + count,
+            0
+          );
+          totalOrders = totalOfflineOrders + totalOnlineOrders;
+          console.log("Total orders for the year:", totalOrders);
+          console.log("Total online orders for the year:", totalOnlineOrders);
+          console.log("Total offline orders for the year:", totalOfflineOrders);
+
+          const createRevenueData = () =>
+            Array.from({ length: 12 }, (_, month) => {
+              const filterOrders = (isOnline) =>
+                orders
+                  .filter(
+                    (order) =>
+                      moment(order.createdDate).month() === month &&
+                      order.isOnline === isOnline &&
+                      order.status === "COMPLETED"
+                  )
+                  .reduce((total, order) => {
+                    const orderTotal = order.productList.reduce(
+                      (orderTotal, product) =>
+                        orderTotal +
+                        product.price *
+                          product.quantity *
+                          (1 - product.discount / 100),
+                      0
+                    );
+                    return total + orderTotal;
+                  }, 0);
+
+              const onlineRevenue = filterOrders(true);
+              const offlineRevenue = filterOrders(false);
+              const totalRevenue = onlineRevenue + offlineRevenue;
+
+              return {
+                month: moment().month(month).format("MMMM"),
+                onlineRevenue,
+                offlineRevenue,
+                totalRevenue,
+              };
+            });
+
+          setRevenueData(createRevenueData());
+        } else {
           const allDaysInMonth = Array.from(
             { length: moment().daysInMonth() },
             (_, i) => i + 1
           );
 
-          // Sử dụng object để lưu trữ số lượng đơn hàng tổng cộng cho mỗi ngày
           const orderCounts = {
             total: Array(allDaysInMonth.length).fill(0),
           };
 
           orders.forEach((order) => {
-            const day = moment(order.createdDate).date(); // Lấy ngày từ ngày tạo đơn hàng
-            orderCounts.total[day - 1]++; // Trừ đi 1 vì ngày bắt đầu từ 1
+            const day = moment(order.createdDate).date();
+            orderCounts.total[day - 1]++;
           });
 
-          const chartData = allDaysInMonth.map((day, index) => ({
-            day: day,
-            total: orderCounts.total[index],
-          }));
+          const createChartData = () =>
+            allDaysInMonth.map((day, index) => ({
+              day,
+              total: orderCounts.total[index],
+            }));
 
-          setChartData(chartData);
+          setChartData(createChartData());
 
-          // Tính lại doanh thu cho từng ngày
-          const revenueData = allDaysInMonth.map((day) => {
-            const dailyRevenue = orders
-              .filter(
-                (order) =>
-                  moment(order.createdDate).date() === day &&
-                  order.status === "COMPLETED"
-              )
-              .reduce((total, order) => {
-                // Tính tổng số tiền của mỗi đơn hàng
-                const orderTotal = order.productList.reduce(
-                  (orderTotal, product) => {
-                    // Tính số tiền của từng sản phẩm trong đơn hàng
-                    const productTotal =
+          const createRevenueData = () =>
+            allDaysInMonth.map((day) => {
+              const dailyRevenue = orders
+                .filter(
+                  (order) =>
+                    moment(order.createdDate).date() === day &&
+                    order.status === "COMPLETED"
+                )
+                .reduce((total, order) => {
+                  const orderTotal = order.productList.reduce(
+                    (orderTotal, product) =>
+                      orderTotal +
                       product.price *
-                      product.quantity *
-                      (1 - product.discount / 100);
-                    // Cộng vào tổng tiền của đơn hàng
-                    return orderTotal + productTotal;
-                  },
-                  0
-                );
-                // Cộng vào tổng doanh thu của đơn hàng
-                return total + orderTotal;
-              }, 0);
+                        product.quantity *
+                        (1 - product.discount / 100),
+                    0
+                  );
+                  return total + orderTotal;
+                }, 0);
 
-            return {
-              day: day,
-              dailyRevenue,
-            };
-          });
-
-          setRevenueData(revenueData);
-          const combinedData = chartData.map((chartItem) => {
-            // Tìm phần tử tương ứng trong revenueData
-            const correspondingRevenueItem = revenueData.find(
-              (revenueItem) => revenueItem.day === chartItem.day
-            );
-
-            // Nếu tìm thấy, thêm thông tin vào phần tử của chartData
-            if (correspondingRevenueItem) {
               return {
-                ...chartItem,
-                dailyRevenue: correspondingRevenueItem.dailyRevenue,
+                day,
+                dailyRevenue,
               };
-            }
+            });
 
-            // Nếu không tìm thấy, trả lại phần tử của chartData không thay đổi
-            return chartItem;
-          });
-          setCombinedData(combinedData);
+          setRevenueData(createRevenueData());
+
+          const createCombinedData = () =>
+            createChartData().map((chartItem) => {
+              const correspondingRevenueItem = createRevenueData().find(
+                (revenueItem) => revenueItem.day === chartItem.day
+              );
+
+              return correspondingRevenueItem
+                ? {
+                    ...chartItem,
+                    dailyRevenue: correspondingRevenueItem.dailyRevenue,
+                  }
+                : chartItem;
+            });
+
+          setCombinedData(createCombinedData());
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -227,13 +201,8 @@ const StatisticalPage = ({ role }) => {
     fetchData();
   }, [month, year, role]);
 
-  const handleChangeYear = (value) => {
-    setYear(value);
-  };
-
-  const handleChangeMonth = (value) => {
-    setMonth(value);
-  };
+  const handleChangeYear = (value) => setYear(value);
+  const handleChangeMonth = (value) => setMonth(value);
 
   return (
     <main className="container">
@@ -243,7 +212,7 @@ const StatisticalPage = ({ role }) => {
           <div className={styles.title}>
             <p>Thống kê doanh thu đơn hàng</p>
             <div className={styles.action}>
-              {role !== "MANAGE" ? (
+              {role !== "MANAGE" && (
                 <>
                   <p>Tháng:</p>
                   <Select
@@ -257,7 +226,7 @@ const StatisticalPage = ({ role }) => {
                     ))}
                   </Select>
                 </>
-              ) : null}
+              )}
               <p style={{ marginLeft: "10px" }}>Năm:</p>
               <Select
                 defaultValue={year.toString()}
@@ -288,12 +257,9 @@ const StatisticalPage = ({ role }) => {
                   <BarChart data={revenueData}>
                     <XAxis
                       dataKey="month"
-                      tickFormatter={(value) => {
-                        const formattedMonth = moment()
-                          .month(value)
-                          .format("MMMM");
-                        return formattedMonth;
-                      }}
+                      tickFormatter={(value) =>
+                        moment().month(value).format("MMMM")
+                      }
                     />
                     <YAxis
                       tickFormatter={(value) =>
@@ -321,6 +287,18 @@ const StatisticalPage = ({ role }) => {
                     />
                   </BarChart>
                 </ResponsiveContainer>
+                {/* <div className={styles.content}>
+                  <p>Số liệu thống kê doanh thu năm {year}</p>
+                  <p>
+                    Doanh thu từ đơn hàng trực tiếp:{" "}
+                    {numeral(totalOfflineOrders).format("0,0$")}
+                  </p>
+                  <p>
+                    Doanh thu từ đơn hàng trực tuyến:{" "}
+                    {numeral(totalOnlineOrders).format("0,0$")}
+                  </p>
+                  <p>Tổng doanh thu: {numeral(totalOrders).format("0,0$")}</p>
+                </div> */}
                 <ResponsiveContainer
                   className={styles.chartContainer}
                   width="100%"
@@ -329,12 +307,9 @@ const StatisticalPage = ({ role }) => {
                   <LineChart data={chartData}>
                     <XAxis
                       dataKey="month"
-                      tickFormatter={(value) => {
-                        const formattedMonth = moment()
-                          .month(value)
-                          .format("MMMM");
-                        return formattedMonth;
-                      }}
+                      tickFormatter={(value) =>
+                        moment().month(value).format("MMMM")
+                      }
                     />
                     <YAxis />
                     <CartesianGrid stroke="#eee" strokeDasharray="3 3" />
@@ -360,44 +335,71 @@ const StatisticalPage = ({ role }) => {
                     />
                   </LineChart>
                 </ResponsiveContainer>
+                {/* <div className={styles.content}>
+                  <p>Số liệu thống kê đơn hàng năm {year}</p>
+                  <p>Số đơn hàng trực tiếp: {totalOfflineOrders}</p>
+                  <p>Số đơn hàng trực tuyến: {totalOnlineOrders}</p>
+                  <p>Tổng số đơn hàng: {totalOrders}</p>
+                </div> */}
               </>
             ) : (
-              <ResponsiveContainer
-                className={styles.chartContainer}
-                width="100%"
-                height={400}
-              >
-                <ComposedChart data={combinedData}>
-                  <XAxis dataKey="day" />
-                  <YAxis yAxisId="left" />
-                  <YAxis
-                    yAxisId="right"
-                    orientation="right"
-                    tickFormatter={(value) => `${numeral(value).format("0a")}`}
-                  />
-                  <Tooltip
-                    formatter={(value, name) =>
-                      name === "Doanh thu"
-                        ? `${numeral(value).format("0,0$")}`
-                        : value
-                    }
-                  />{" "}
-                  <Legend />
-                  <Bar
-                    yAxisId="right" // Chuyển sang trục y bên phải
-                    dataKey="dailyRevenue"
-                    fill="green"
-                    name="Doanh thu"
-                  />
-                  <Line
-                    yAxisId="left" // Giữ trục y bên trái
-                    type="monotone"
-                    dataKey="total"
-                    stroke="#E31837"
-                    name="Số đơn hàng"
-                  />
-                </ComposedChart>
-              </ResponsiveContainer>
+              <>
+                <ResponsiveContainer
+                  className={styles.chartContainer}
+                  width="100%"
+                  height={400}
+                >
+                  <ComposedChart data={combinedData}>
+                    <XAxis dataKey="day" />
+                    <YAxis yAxisId="left" />
+                    <YAxis
+                      yAxisId="right"
+                      orientation="right"
+                      tickFormatter={(value) =>
+                        `${numeral(value).format("0a")}`
+                      }
+                    />
+                    <Tooltip
+                      formatter={(value, name) =>
+                        name === "Doanh thu"
+                          ? `${numeral(value).format("0,0$")}`
+                          : value
+                      }
+                    />
+                    <Legend />
+                    <Bar
+                      yAxisId="right"
+                      dataKey="dailyRevenue"
+                      fill="green"
+                      name="Doanh thu"
+                    />
+                    <Line
+                      yAxisId="left"
+                      type="monotone"
+                      dataKey="total"
+                      stroke="#E31837"
+                      name="Số đơn hàng"
+                    />
+                  </ComposedChart>
+                </ResponsiveContainer>
+                {/* <div className={styles.content}>
+                  <p>
+                    Số liệu thống kê doanh và đơn hàng tháng {month} năm {year}
+                  </p>
+                  <p>
+                    Doanh thu từ đơn hàng trực tiếp:{" "}
+                    {numeral(combinedData?.[0]?.dailyRevenue).format("0,0$")}
+                  </p>
+                  <p>
+                    Doanh thu từ đơn hàng trực tuyến:{" "}
+                    {numeral(combinedData?.[0]?.total).format("0,0$")}
+                  </p>
+                  <p>
+                    Tổng doanh thu:{" "}
+                    {numeral(combinedData?.[0]?.total).format("0,0$")}
+                  </p>
+                </div> */}
+              </>
             )}
           </>
         ) : (
@@ -409,7 +411,9 @@ const StatisticalPage = ({ role }) => {
     </main>
   );
 };
+
 StatisticalPage.propTypes = {
   role: PropTypes.string,
 };
+
 export default StatisticalPage;
