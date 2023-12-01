@@ -301,7 +301,7 @@ const OrderMePage = ({ role }) => {
               </Select>
               <Popconfirm
                 placement="topRight"
-                title={`Xác nhận thay đổi trạng thái đơn hàng ${record._id}?`}
+                title={`Xác nhận thay đổi trạng thái đơn hàng này?`}
                 onConfirm={() => handleUpdateStatus(record)}
                 okText="Xác nhận"
                 cancelText="Hủy"
