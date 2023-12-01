@@ -161,14 +161,16 @@ const StatisticalPage = ({ role }) => {
                   const orderTotal = order.productList.reduce(
                     (orderTotal, product) =>
                       orderTotal +
-                      product.price *
-                        product.quantity *
-                        (1 - product.discount / 100),
+                      product.price * product.quantity * (1 - product.discount / 100),
                     0
                   );
-                  return total + orderTotal;
+          
+                  //số tiền doanh thu thực tế sau khi vận chuyển và chiết khấu thêm
+                  const amountPaidForOrder =
+                    orderTotal - (order.orderDisscount || 0) + (order.totalFee || 0);
+          
+                  return total + amountPaidForOrder;
                 }, 0);
-
               return {
                 day,
                 dailyRevenue,
