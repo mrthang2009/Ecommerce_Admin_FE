@@ -15,7 +15,7 @@ import {
   Popconfirm,
   message,
 } from "antd";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import { WarningOutlined, CheckOutlined } from "@ant-design/icons";
 import axiosClient from "../libraries/axiosClient";
 import moment from "moment";
@@ -293,9 +293,9 @@ const PendingOrderSalesPage = () => {
           <Panel header="Bộ lọc tìm kiếm đơn hàng" key="searchFilter">
             <div className={styles.filter}>
               <Form>
-                <Row gutter={16}>
-                  <Col span={8}>
-                    <Form.Item label="Mã đơn hàng">
+                <Row gutter={[16, 16]}>
+                  <Col xs={24} sm={12} md={8} lg={8} xl={6}>
+                    <Form.Item label="Mã ĐH">
                       <Input
                         placeholder="Nhập mã đơn hàng"
                         value={id}
@@ -305,10 +305,10 @@ const PendingOrderSalesPage = () => {
                     </Form.Item>
                   </Col>
 
-                  <Col span={8}>
-                    <Form.Item label="Hình thức thanh toán">
+                  <Col xs={12} sm={12} md={8} lg={8} xl={6}>
+                    <Form.Item label="Hình thức TT">
                       <Select
-                        placeholder="Chọn hình thức thanh toán"
+                        placeholder="Chọn hình thức TT"
                         value={paymentType}
                         onChange={(value) => setPaymentType(value)}
                       >
@@ -317,10 +317,10 @@ const PendingOrderSalesPage = () => {
                       </Select>
                     </Form.Item>
                   </Col>
-                  <Col span={8}>
-                    <Form.Item label="Hình thức mua hàng">
+                  <Col xs={12} sm={12} md={8} lg={8} xl={6}>
+                    <Form.Item label="Hình thức MH">
                       <Select
-                        placeholder="Chọn hình thức mua hàng"
+                        placeholder="Chọn hình thức MH"
                         value={typeOrder}
                         onChange={(value) => setTypeOrder(value)}
                       >
@@ -329,9 +329,8 @@ const PendingOrderSalesPage = () => {
                       </Select>
                     </Form.Item>
                   </Col>
-                </Row>
-                <Row gutter={16}>
-                  <Col span={6}>
+
+                  <Col xs={24} sm={12} md={8} lg={8} xl={6}>
                     <Form.Item label="Trạng thái">
                       <Select
                         placeholder="Chọn trạng thái"
@@ -348,7 +347,7 @@ const PendingOrderSalesPage = () => {
                       </Select>
                     </Form.Item>
                   </Col>
-                  <Col span={6}>
+                  <Col xs={12} sm={12} md={8} lg={8} xl={6}>
                     <Form.Item label="Từ ngày">
                       <DatePicker
                         value={startDate}
@@ -356,7 +355,7 @@ const PendingOrderSalesPage = () => {
                       />
                     </Form.Item>
                   </Col>
-                  <Col span={6}>
+                  <Col xs={12} sm={12} md={8} lg={8} xl={6}>
                     <Form.Item label="Đến ngày">
                       <DatePicker
                         value={endDate}
@@ -364,7 +363,7 @@ const PendingOrderSalesPage = () => {
                       />
                     </Form.Item>
                   </Col>
-                  <Col span={6}>
+                  <Col xs={24} sm={12} md={8} lg={8} xl={6}>
                     <Button type="primary" onClick={handleFilter}>
                       Lọc
                     </Button>

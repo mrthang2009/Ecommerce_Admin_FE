@@ -295,7 +295,7 @@ const OrderPage = () => {
                   <Col xs={12} sm={12} md={8} lg={8} xl={6}>
                     <Form.Item label="Hình thức TT">
                       <Select
-                        placeholder="Chọn hình thức thanh toán"
+                        placeholder="Chọn hình thức TT"
                         value={paymentType}
                         onChange={(value) => setPaymentType(value)}
                       >
@@ -307,7 +307,7 @@ const OrderPage = () => {
                   <Col xs={12} sm={12} md={8} lg={8} xl={6}>
                     <Form.Item label="Hình thức MH">
                       <Select
-                        placeholder="Chọn hình thức mua hàng"
+                        placeholder="Chọn hình thức MH"
                         value={typeOrder}
                         onChange={(value) => setTypeOrder(value)}
                       >
