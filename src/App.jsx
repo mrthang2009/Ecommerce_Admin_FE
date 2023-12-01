@@ -75,7 +75,8 @@ const App = () => {
             {decodedPayload && decodedPayload.typeRole === "MANAGE" && (
               <>
                 <Route
-                  path="/"
+                  // path="/"
+                  index
                   element={<StatisticalPage role={decodedPayload.typeRole} />}
                 />
                 <Route path="/orders" element={<OrderPage />} />
