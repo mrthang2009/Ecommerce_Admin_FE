@@ -246,9 +246,9 @@ const CategoryPage = () => {
       <Card>
         <Row gutter={16} justify="space-between" align="middle">
           <Col xs={24} sm={24} md={16} lg={18} xl={12}>
-            <Form.Item label="Tìm kiếm nhân viên">
+            <Form.Item label="Tìm kiếm danh mục">
               <Input
-                placeholder="Nhập tên hoặc email hoặc số điện thoại"
+                placeholder="Nhập tên danh mục"
                 value={searchKeyword}
                 onChange={(e) => setSearchKeyword(e.target.value)}
                 onPressEnter={handleSearchOnEnter}
@@ -268,7 +268,7 @@ const CategoryPage = () => {
               type="link"
               onClick={() => setAddCategoryModalVisible(true)}
             >
-              Thêm nhân viên
+              Thêm danh mục
             </Button>
           </Col>
         </Row>

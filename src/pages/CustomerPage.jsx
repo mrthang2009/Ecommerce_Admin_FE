@@ -240,7 +240,7 @@ const CustomerPage = () => {
       <Card>
         <Row align="middle" gutter={[16, 16]} justify="space-between">
           <Col xs={24} sm={24} md={16} lg={18} xl={12}>
-            <Form.Item label="Tìm kiếm nhà cung cấp">
+            <Form.Item label="Tìm kiếm khách hàng">
               <Input
                 placeholder="Nhập tên hoặc email hoặc số điện thoại"
                 value={searchKeyword}
