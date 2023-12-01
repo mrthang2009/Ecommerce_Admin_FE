@@ -276,11 +276,14 @@ const ProductPage = () => {
                       </Col>
 
                       <Col xs={24} sm={12} md={8} lg={12} xl={8}>
-                        <Button type="primary" onClick={handleFilter}>
+                        <Button
+                          loading={loadings[0]}
+                          type="primary"
+                          onClick={handleFilter}
+                        >
                           Lọc
                         </Button>
                         <Button
-                          loading={loadings[0]}
                           onClick={clearFilters}
                           style={{ marginLeft: "10px" }}
                         >
