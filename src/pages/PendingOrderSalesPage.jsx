@@ -31,8 +31,6 @@ const DEFAULT_LIMIT = 8;
 
 const PendingOrderSalesPage = () => {
   const [id, setId] = useState("");
-  const [status, setStatus] = useState("");
-  const [typeOrder, setTypeOrder] = useState("");
   const [paymentType, setPaymentType] = useState("");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
@@ -51,8 +49,8 @@ const PendingOrderSalesPage = () => {
       const res = await axiosClient.get("/orders/filter", {
         params: {
           id,
-          status,
-          typeOrder,
+          status: "PLACED",
+          typeOrder: true,
           paymentType,
           startDate: startDate ? startDate.format("YYYY-MM-DD") : "",
           endDate: endDate ? endDate.format("YYYY-MM-DD") : "",
@@ -259,7 +257,7 @@ const PendingOrderSalesPage = () => {
             </Select>
             <Popconfirm
               placement="topRight"
-              title={`Xác nhận thay đổi trạng thái đơn hàng ${record._id}?`}
+              title={`Xác nhận thay đổi trạng thái đơn hàng này?`}
               onConfirm={() => handleUpdateStatus(record)}
               okText="Xác nhận"
               cancelText="Hủy"
@@ -274,8 +272,6 @@ const PendingOrderSalesPage = () => {
 
   const clearFilters = () => {
     setId("");
-    setStatus("");
-    setTypeOrder("");
     setPaymentType("");
     setStartDate(null);
     setEndDate(null);
@@ -305,7 +301,7 @@ const PendingOrderSalesPage = () => {
                     </Form.Item>
                   </Col>
 
-                  <Col xs={12} sm={12} md={8} lg={8} xl={6}>
+                  <Col xs={24} sm={24} md={8} lg={8} xl={6}>
                     <Form.Item label="Hình thức TT">
                       <Select
                         placeholder="Chọn hình thức TT"
@@ -314,35 +310,6 @@ const PendingOrderSalesPage = () => {
                       >
                         <Option value="CASH">Tiền mặt</Option>
                         <Option value="CARD">Thẻ</Option>
-                      </Select>
-                    </Form.Item>
-                  </Col>
-                  <Col xs={12} sm={12} md={8} lg={8} xl={6}>
-                    <Form.Item label="Hình thức MH">
-                      <Select
-                        placeholder="Chọn hình thức MH"
-                        value={typeOrder}
-                        onChange={(value) => setTypeOrder(value)}
-                      >
-                        <Option value={true}>Trực tuyến</Option>
-                        <Option value={false}>Trực tiếp</Option>
-                      </Select>
-                    </Form.Item>
-                  </Col>
-                  <Col xs={24} sm={12} md={8} lg={8} xl={6}>
-                    <Form.Item label="Trạng thái">
-                      <Select
-                        placeholder="Chọn trạng thái"
-                        value={status}
-                        onChange={(value) => setStatus(value)}
-                      >
-                        <Option value="COMPLETED">Đã hoàn thành</Option>
-                        <Option value="DELIVERING">Đang vận chuyển</Option>
-                        <Option value="PREPARED">Đã chuẩn bị xong</Option>
-                        <Option value="PLACED">Đã đặt hàng</Option>
-                        <Option value="CANCELED">Shop hủy</Option>
-                        <Option value="REJECTED">KH hủy</Option>
-                        <Option value="FLAKER">Boom hàng</Option>
                       </Select>
                     </Form.Item>
                   </Col>

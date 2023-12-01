@@ -31,7 +31,6 @@ const DEFAULT_LIMIT = 8;
 
 const PendingOrderShipperPage = () => {
   const [id, setId] = useState("");
-  const [typeOrder, setTypeOrder] = useState("");
   const [paymentType, setPaymentType] = useState("");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
@@ -49,8 +48,8 @@ const PendingOrderShipperPage = () => {
       const res = await axiosClient.get("/orders/filter", {
         params: {
           id,
-          status,
-          typeOrder,
+          status: "PREPARED",
+          typeOrder: true,
           paymentType,
           startDate: startDate ? startDate.format("YYYY-MM-DD") : "",
           endDate: endDate ? endDate.format("YYYY-MM-DD") : "",
@@ -246,7 +245,6 @@ const PendingOrderShipperPage = () => {
 
   const clearFilters = () => {
     setId("");
-    setTypeOrder("");
     setPaymentType("");
     setStartDate(null);
     setEndDate(null);
@@ -288,35 +286,6 @@ const PendingOrderShipperPage = () => {
                       >
                         <Option value="CASH">Tiền mặt</Option>
                         <Option value="CARD">Thẻ</Option>
-                      </Select>
-                    </Form.Item>
-                  </Col>
-                  <Col xs={12} sm={12} md={8} lg={8} xl={6}>
-                    <Form.Item label="Hình thức MH">
-                      <Select
-                        placeholder="Chọn hình thức MH"
-                        value={typeOrder}
-                        onChange={(value) => setTypeOrder(value)}
-                      >
-                        <Option value={true}>Trực tuyến</Option>
-                        <Option value={false}>Trực tiếp</Option>
-                      </Select>
-                    </Form.Item>
-                  </Col>
-                  <Col xs={24} sm={12} md={8} lg={8} xl={6}>
-                    <Form.Item label="Trạng thái">
-                      <Select
-                        placeholder="Chọn trạng thái"
-                        value={status}
-                        // onChange={(value) => setStatus(value)}
-                      >
-                        <Option value="COMPLETED">Đã hoàn thành</Option>
-                        <Option value="DELIVERING">Đang vận chuyển</Option>
-                        <Option value="PREPARED">Đã chuẩn bị xong</Option>
-                        <Option value="PLACED">Đã đặt hàng</Option>
-                        <Option value="CANCELED">Shop hủy</Option>
-                        <Option value="REJECTED">KH hủy</Option>
-                        <Option value="FLAKER">Boom hàng</Option>
                       </Select>
                     </Form.Item>
                   </Col>
