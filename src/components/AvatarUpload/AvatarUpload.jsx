@@ -61,10 +61,10 @@ const AvatarUpload = ({ onSubmit, handleCancel, loading }) => {
   return (
     <Form
       labelCol={{
-        span: 4,
+        span: 5,
       }}
       wrapperCol={{
-        span: 14,
+        span: 19,
       }}
       layout="horizontal"
       initialValues={{

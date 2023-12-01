@@ -353,7 +353,7 @@ const StatisticalPage = ({ role }) => {
                 >
                   <ComposedChart data={combinedData}>
                     <XAxis dataKey="day" />
-                    <YAxis yAxisId="left" />
+                    <YAxis yAxisId="left"/>
                     <YAxis
                       yAxisId="right"
                       orientation="right"
