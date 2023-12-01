@@ -216,7 +216,6 @@ const OrderModal = ({
         );
         const searchResults = res.data.payload || [];
         setSearchResult(searchResults);
-        // console.log('««««« searchResults »»»»»', searchResults);
       } catch (error) {
         console.log(error);
       }

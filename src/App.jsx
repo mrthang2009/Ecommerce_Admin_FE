@@ -50,12 +50,15 @@ const App = () => {
   };
 
   // Sử dụng useEffect để gọi getDecodedPayload khi component được render
-  useEffect(getDecodedPayload, [
-    navigate,
-    token,
-    hasDecodedToken,
-    decodedPayload,
-  ]);
+  // useEffect(getDecodedPayload, [
+  //   navigate,
+  //   token,
+  //   hasDecodedToken,
+  //   decodedPayload,
+  // ]);
+  useEffect(() => {
+    getDecodedPayload();
+  }, [navigate, token, hasDecodedToken, decodedPayload]);
   return (
     <>
       <Routes>
