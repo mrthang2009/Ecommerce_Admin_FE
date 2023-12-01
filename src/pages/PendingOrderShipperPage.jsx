@@ -15,7 +15,7 @@ import {
   Popconfirm,
   message,
 } from "antd";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import { WarningOutlined, CheckOutlined } from "@ant-design/icons";
 import axiosClient from "../libraries/axiosClient";
 import moment from "moment";
@@ -30,6 +30,9 @@ numeral.locale("vi");
 const DEFAULT_LIMIT = 8;
 
 const PendingOrderShipperPage = () => {
+  //Trạng thái loading của button
+  const [loadings, setLoadings] = useState([false]);
+
   const [id, setId] = useState("");
   const [paymentType, setPaymentType] = useState("");
   const [startDate, setStartDate] = useState(null);
@@ -45,6 +48,7 @@ const PendingOrderShipperPage = () => {
 
   const filterOrder = async () => {
     try {
+      setLoadings([true]);
       const res = await axiosClient.get("/orders/filter", {
         params: {
           id,
@@ -58,8 +62,10 @@ const PendingOrderShipperPage = () => {
       const Results = res.data.payload || [];
       setFilterResult(Results);
       setNoFilterResult(Results.length === 0);
+      setLoadings([false]);
     } catch (error) {
       console.error("Lỗi khi gọi API: ", error);
+      setLoadings([false]);
     }
   };
 
@@ -259,12 +265,9 @@ const PendingOrderShipperPage = () => {
           bordered={false}
           style={{ backgroundColor: "#E6F4FF" }}
         >
-          <Panel
-            header="Bộ lọc tìm kiếm đơn hàng:"
-            key="searchFilter"
-          >
+          <Panel header="Bộ lọc tìm kiếm đơn hàng:" key="searchFilter">
             <div className={styles.filter}>
-            <Form>
+              <Form>
                 <Row gutter={16}>
                   <Col xs={24} sm={12} md={8} lg={8} xl={6}>
                     <Form.Item label="Mã ĐH">
@@ -306,7 +309,11 @@ const PendingOrderShipperPage = () => {
                     </Form.Item>
                   </Col>
                   <Col xs={24} sm={12} md={8} lg={8} xl={6}>
-                    <Button type="primary" onClick={handleFilter}>
+                    <Button
+                      loading={loadings[0]}
+                      type="primary"
+                      onClick={handleFilter}
+                    >
                       Lọc
                     </Button>
                     <Button

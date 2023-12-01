@@ -35,6 +35,9 @@ const { Panel } = Collapse;
 const { Option } = Select;
 const DEFAULT_LIMIT = 8;
 const OrderMePage = ({ role }) => {
+  //Trạng thái loading của button
+  const [loadings, setLoadings] = useState([false]);
+
   const [id, setId] = useState("");
   const [status, setStatus] = useState("");
   const [paymentType, setPaymentType] = useState("");
@@ -52,6 +55,7 @@ const OrderMePage = ({ role }) => {
 
   const filterOrder = async () => {
     try {
+      setLoadings([true]);
       const res = await axiosClient.get("/orders/filter/me", {
         params: {
           id,
@@ -67,8 +71,10 @@ const OrderMePage = ({ role }) => {
       const Results = res.data.payload || [];
       setFilterResult(Results);
       setNoFilterResult(Results.length === 0);
+      setLoadings([false]);
     } catch (error) {
       console.error("Lỗi khi gọi API: ", error);
+      setLoadings([false]);
     }
   };
   const getOrder = useCallback(async () => {
@@ -388,7 +394,11 @@ const OrderMePage = ({ role }) => {
                     </Form.Item>
                   </Col>
                   <Col xs={24} sm={12} md={8} lg={8} xl={6}>
-                    <Button type="primary" onClick={handleFilter}>
+                    <Button
+                      loading={loadings[0]}
+                      type="primary"
+                      onClick={handleFilter}
+                    >
                       Lọc
                     </Button>
                     <Button
