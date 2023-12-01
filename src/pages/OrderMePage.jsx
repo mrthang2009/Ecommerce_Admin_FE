@@ -16,7 +16,7 @@ import {
   Popconfirm,
   message,
 } from "antd";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import {
   WarningOutlined,
@@ -37,7 +37,6 @@ const DEFAULT_LIMIT = 8;
 const OrderMePage = ({ role }) => {
   const [id, setId] = useState("");
   const [status, setStatus] = useState("");
-  const [typeOrder, setTypeOrder] = useState("");
   const [paymentType, setPaymentType] = useState("");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
@@ -56,8 +55,8 @@ const OrderMePage = ({ role }) => {
       const res = await axiosClient.get("/orders/filter/me", {
         params: {
           id,
-          status,
-          typeOrder,
+          status: role === "SALES" ? "COMPLETED" : status,
+          typeOrder: role === "SALES" ? false : true,
           paymentType,
           startDate: startDate ? startDate.format("YYYY-MM-DD") : "",
           endDate: endDate ? endDate.format("YYYY-MM-DD") : "",
@@ -104,7 +103,7 @@ const OrderMePage = ({ role }) => {
   );
 
   const handleFilter = () => {
-    filterOrder(id, status, typeOrder, paymentType, startDate, endDate);
+    filterOrder(id, status, paymentType, startDate, endDate);
   };
 
   const handleFilterOnEnter = (e) => {
@@ -144,11 +143,7 @@ const OrderMePage = ({ role }) => {
       record.status === "DELIVERING" ||
       record.status === "PREPARED"
     ) {
-      return (
-        <p>
-          _____
-        </p>
-      );
+      return <p>_____</p>;
     } else {
       return (
         <p style={{ color: "#E31837", fontSize: "120%" }}>
@@ -182,24 +177,12 @@ const OrderMePage = ({ role }) => {
         <Link to={`/orders/${record._id}`}>{record._id}</Link>
       ),
     },
-    // {
-    //   title: "Hình thức mua hàng",
-    //   dataIndex: "isOnline",
-    //   key: "isOnline",
-    //   align: "center",
-    //   responsive: ["lg"],
-    //   render: (text, record) => (
-    //     <p>{record.isOnline ? "Trực tuyến" : "Trực tiếp"}</p>
-    //   ),
-    //   // Ẩn cột nếu role không phải là "SALES"
-    //   className: role !== "SALES" ? styles.hiddenColumn : "",
-    // },
     {
       title: "Trạng thái đơn hàng",
       dataIndex: "status",
       key: "status",
       align: "center",
-      
+
       render: (text, record) => {
         const statusText = {
           PLACED: "Đã đặt hàng",
@@ -333,7 +316,6 @@ const OrderMePage = ({ role }) => {
   const clearFilters = () => {
     setId("");
     setStatus("");
-    setTypeOrder("");
     setPaymentType("");
     setStartDate(null);
     setEndDate(null);
@@ -347,15 +329,12 @@ const OrderMePage = ({ role }) => {
           defaultActiveKey={["searchFilter"]}
           style={{ backgroundColor: "#E6F4FF" }}
         >
-          <Panel
-            header="Bộ lọc tìm kiếm đơn hàng"
-            key="searchFilter"
-          >
+          <Panel header="Bộ lọc tìm kiếm đơn hàng" key="searchFilter">
             <div className={styles.filter}>
               <Form>
                 <Row gutter={16}>
-                  <Col span={8}>
-                    <Form.Item label="Mã đơn hàng">
+                  <Col xs={24} sm={12} md={8} lg={8} xl={6}>
+                    <Form.Item label="Mã ĐH">
                       <Input
                         placeholder="Nhập mã đơn hàng"
                         value={id}
@@ -364,10 +343,10 @@ const OrderMePage = ({ role }) => {
                       />
                     </Form.Item>
                   </Col>
-                  <Col span={8}>
-                    <Form.Item label="Hình thức thanh toán">
+                  <Col xs={24} sm={24} md={8} lg={8} xl={6}>
+                    <Form.Item label="Hình thức TT">
                       <Select
-                        placeholder="Chọn hình thức thanh toán"
+                        placeholder="Chọn hình thức TT"
                         value={paymentType}
                         onChange={(value) => setPaymentType(value)}
                       >
@@ -376,38 +355,23 @@ const OrderMePage = ({ role }) => {
                       </Select>
                     </Form.Item>
                   </Col>
-                  <Col span={8}>
-                    <Form.Item label="Hình thức mua hàng">
-                      <Select
-                        placeholder="Chọn hình thức mua hàng"
-                        value={typeOrder}
-                        onChange={(value) => setTypeOrder(value)}
-                      >
-                        <Option value={true}>Trực tuyến</Option>
-                        <Option value={false}>Trực tiếp</Option>
-                      </Select>
-                    </Form.Item>
-                  </Col>
-                </Row>
-                <Row gutter={16}>
-                  <Col span={6}>
-                    <Form.Item label="Trạng thái">
-                      <Select
-                        placeholder="Chọn trạng thái"
-                        value={status}
-                        onChange={(value) => setStatus(value)}
-                      >
-                        <Option value="COMPLETED">Đã hoàn thành</Option>
-                        <Option value="DELIVERING">Đang vận chuyển</Option>
-                        <Option value="PREPARING">Đang chuẩn bị</Option>
-                        <Option value="PLACED">Đã đặt hàng</Option>
-                        <Option value="CANCELED">Shop hủy</Option>
-                        <Option value="REJECTED">KH hủy</Option>
-                        <Option value="FLAKER">Boom hàng</Option>
-                      </Select>
-                    </Form.Item>
-                  </Col>
-                  <Col span={6}>
+                  {role === "SALES" ? null : (
+                    <Col xs={12} sm={12} md={8} lg={8} xl={6}>
+                      <Form.Item label="Trạng thái">
+                        <Select
+                          placeholder="Chọn trạng thái"
+                          value={status}
+                          onChange={(value) => setStatus(value)}
+                        >
+                          <Option value="COMPLETED">Đã hoàn thành</Option>
+                          <Option value="DELIVERING">Đang vận chuyển</Option>
+                          <Option value="FLAKER">Boom hàng</Option>
+                        </Select>
+                      </Form.Item>
+                    </Col>
+                  )}
+
+                  <Col xs={12} sm={12} md={8} lg={8} xl={6}>
                     <Form.Item label="Từ ngày">
                       <DatePicker
                         value={startDate}
@@ -415,7 +379,7 @@ const OrderMePage = ({ role }) => {
                       />
                     </Form.Item>
                   </Col>
-                  <Col span={6}>
+                  <Col xs={12} sm={12} md={8} lg={8} xl={6}>
                     <Form.Item label="Đến ngày">
                       <DatePicker
                         value={endDate}
@@ -423,7 +387,7 @@ const OrderMePage = ({ role }) => {
                       />
                     </Form.Item>
                   </Col>
-                  <Col span={6}>
+                  <Col xs={24} sm={12} md={8} lg={8} xl={6}>
                     <Button type="primary" onClick={handleFilter}>
                       Lọc
                     </Button>
@@ -458,7 +422,7 @@ const OrderMePage = ({ role }) => {
         ) : (
           <>
             <Table
-              style={{ backgroundColor: "#E6F4FF"}}
+              style={{ backgroundColor: "#E6F4FF" }}
               columns={columns}
               dataSource={filterResult.length > 0 ? filterResult : orders}
               pagination={false}
