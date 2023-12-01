@@ -4,7 +4,7 @@ import axiosClient from "../libraries/axiosClient";
 import { useEffect } from "react";
 import styles from "./stylesPage/LoginPage.module.scss";
 import { useState } from "react";
-// import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet";
 
 const LoginForm = () => {
   const [form] = Form.useForm();
@@ -56,9 +56,9 @@ const LoginForm = () => {
 
   return (
     <>
-      {/* <Helmet>
+      <Helmet>
         <title>Đăng nhập</title>
-      </Helmet> */}
+      </Helmet>
       <div className="login-container">
         <Form
           form={form}

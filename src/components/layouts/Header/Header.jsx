@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation  } from "react-router-dom";
+
 
 import styles from "./Header.module.scss";
 import Navigation from "../../Navigation/Navigation";
@@ -13,10 +14,15 @@ import {
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 const Header = ({ typeRole, avatar, last_name }) => {
+  const location = useLocation();
   const [navVisible, setNavVisible] = useState(false);
   const toggleNavVisibility = () => {
     setNavVisible(!navVisible);
   };
+  useEffect(() => {
+    // Thực hiện thay đổi trạng thái menu dựa trên location.pathname
+    setNavVisible(false);
+  }, [location.pathname]);
   // Sử dụng useNavigate để điều hướng trang
   const navigate = useNavigate();
   const handleLogout = () => {

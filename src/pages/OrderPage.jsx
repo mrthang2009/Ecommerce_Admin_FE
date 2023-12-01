@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback} from "react";
+import { Link } from 'react-router-dom';
 import {
   Table,
   Button,
@@ -150,7 +151,7 @@ const OrderPage = () => {
       dataIndex: "_id",
       key: "_id",
       render: (text, record) => (
-        <a href={`/orders/${record._id}`}>{record._id}</a>
+        <Link to={`/orders/${record._id}`}>{record._id}</Link>
       ),
     },
     {
