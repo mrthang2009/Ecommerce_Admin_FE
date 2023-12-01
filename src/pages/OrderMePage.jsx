@@ -16,6 +16,7 @@ import {
   Popconfirm,
   message,
 } from "antd";
+import { Link } from 'react-router-dom';
 import PropTypes from "prop-types";
 import {
   WarningOutlined,
@@ -178,7 +179,7 @@ const OrderMePage = ({ role }) => {
       dataIndex: "_id",
       key: "_id",
       render: (text, record) => (
-        <a href={`/orders/${record._id}`}>{record._id}</a>
+        <Link to={`/orders/${record._id}`}>{record._id}</Link>
       ),
     },
     // {

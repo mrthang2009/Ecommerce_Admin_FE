@@ -15,6 +15,7 @@ import {
   Popconfirm,
   message,
 } from "antd";
+import { Link } from 'react-router-dom';
 import { WarningOutlined, CheckOutlined } from "@ant-design/icons";
 import axiosClient from "../libraries/axiosClient";
 import moment from "moment";
@@ -137,7 +138,7 @@ const PendingOrderShipperPage = () => {
       dataIndex: "_id",
       key: "_id",
       render: (text, record) => (
-        <a href={`/orders/${record._id}`}>{record._id}</a>
+        <Link to={`/orders/${record._id}`}>{record._id}</Link>
       ),
     },
     {
