@@ -293,7 +293,7 @@ const PendingOrderSalesPage = () => {
           <Panel header="Bộ lọc tìm kiếm đơn hàng" key="searchFilter">
             <div className={styles.filter}>
               <Form>
-                <Row gutter={[16, 16]}>
+                <Row gutter={16}>
                   <Col xs={24} sm={12} md={8} lg={8} xl={6}>
                     <Form.Item label="Mã ĐH">
                       <Input
@@ -329,7 +329,6 @@ const PendingOrderSalesPage = () => {
                       </Select>
                     </Form.Item>
                   </Col>
-
                   <Col xs={24} sm={12} md={8} lg={8} xl={6}>
                     <Form.Item label="Trạng thái">
                       <Select
@@ -339,7 +338,7 @@ const PendingOrderSalesPage = () => {
                       >
                         <Option value="COMPLETED">Đã hoàn thành</Option>
                         <Option value="DELIVERING">Đang vận chuyển</Option>
-                        <Option value="PREPARING">Đang chuẩn bị</Option>
+                        <Option value="PREPARED">Đã chuẩn bị xong</Option>
                         <Option value="PLACED">Đã đặt hàng</Option>
                         <Option value="CANCELED">Shop hủy</Option>
                         <Option value="REJECTED">KH hủy</Option>
