@@ -277,7 +277,7 @@ const PendingOrderShipperPage = () => {
                     </Form.Item>
                   </Col>
 
-                  <Col xs={12} sm={12} md={8} lg={8} xl={6}>
+                  <Col xs={24} sm={24} md={8} lg={8} xl={6}>
                     <Form.Item label="Hình thức TT">
                       <Select
                         placeholder="Chọn hình thức TT"
