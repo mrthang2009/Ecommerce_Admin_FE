@@ -93,7 +93,8 @@ const App = () => {
             {decodedPayload && decodedPayload.typeRole === "SALES" && (
               <>
                 <Route
-                  path="/"
+                  // path="/"
+                  index
                   element={<StatisticalPage role={decodedPayload.typeRole} />}
                 />
                 <Route path="/create-order" element={<CreateOrder />} />
@@ -114,7 +115,8 @@ const App = () => {
             {decodedPayload && decodedPayload.typeRole === "SHIPPER" && (
               <>
                 <Route
-                  path="/"
+                  // path="/"
+                  index
                   element={<StatisticalPage role={decodedPayload.typeRole} />}
                 />
                 <Route path="/account" element={<AccountPage />} />
