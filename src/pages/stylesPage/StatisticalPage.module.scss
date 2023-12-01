@@ -17,3 +17,14 @@
         }
     }
 }
+@media only screen and (max-width: 768px) {
+    .title {
+        display: inline-block;
+    
+        .action { 
+            p {
+                margin-left: 0;
+            }
+        }
+    }
+}

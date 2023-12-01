@@ -13,10 +13,9 @@ import {
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 const Header = ({ typeRole, avatar, last_name }) => {
-  const [navVisible, setNavVisible] = useState(true);
+  const [navVisible, setNavVisible] = useState(false);
   const toggleNavVisibility = () => {
     setNavVisible(!navVisible);
-    console.log("««««« navVisible »»»»»", navVisible);
   };
   // Sử dụng useNavigate để điều hướng trang
   const navigate = useNavigate();
@@ -76,7 +75,7 @@ const Header = ({ typeRole, avatar, last_name }) => {
       </div>
 
       <nav className={`${styles.nav} ${navVisible ? styles.navVisible : ""}`}>
-        <Navigation role={typeRole} />
+        <Navigation role={typeRole} setMenuVisible/>
       </nav>
     </header>
   );

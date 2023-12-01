@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { Menu, Card } from "antd";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 const Navigation = ({ role }) => {
   let items = [];
@@ -97,7 +97,6 @@ const Navigation = ({ role }) => {
     },
   ];
 
-  const location = useLocation(); // Lấy thông tin đường dẫn hiện tại
   const isUserProfilePage =
     location.pathname === "/account" ||
     location.pathname === "/change-password";

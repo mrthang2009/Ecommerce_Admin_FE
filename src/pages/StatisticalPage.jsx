@@ -227,7 +227,7 @@ const StatisticalPage = ({ role }) => {
                   </Select>
                 </>
               )}
-              <p style={{ marginLeft: "10px" }}>Năm:</p>
+              <p>Năm:</p>
               <Select
                 defaultValue={year.toString()}
                 onChange={handleChangeYear}
