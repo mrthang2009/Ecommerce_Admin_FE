@@ -16,6 +16,7 @@ import {
   message,
 } from "antd";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 import { WarningOutlined, CheckOutlined } from "@ant-design/icons";
 import axiosClient from "../libraries/axiosClient";
 import moment from "moment";
@@ -29,7 +30,7 @@ numeral.locale("vi");
 
 const DEFAULT_LIMIT = 8;
 
-const PendingOrderSalesPage = () => {
+const PendingOrderPage = ({ role }) => {
   //Trạng thái loading của button
   const [loadings, setLoadings] = useState([false]);
 
@@ -53,7 +54,7 @@ const PendingOrderSalesPage = () => {
       const res = await axiosClient.get("/orders/filter", {
         params: {
           id,
-          status: "PLACED",
+          status: role === "SALES" ? "PLACED" : "PREPARED",
           typeOrder: true,
           paymentType,
           startDate: startDate ? startDate.format("YYYY-MM-DD") : "",
@@ -72,8 +73,14 @@ const PendingOrderSalesPage = () => {
 
   const getOrder = useCallback(async () => {
     try {
+      let status = "";
+      if (role === "SALES") {
+        status = "PLACED";
+      } else {
+        status = "PREPARED";
+      }
       const res = await axiosClient.get(
-        `/orders/pending-sales?page=${pagination.page}&pageSize=${pagination.pageSize}&status=PLACED`
+        `/orders/pending-sales?page=${pagination.page}&pageSize=${pagination.pageSize}&status=${status}`
       );
       setOrders(res.data.payload);
       setPagination((prev) => ({
@@ -83,7 +90,7 @@ const PendingOrderSalesPage = () => {
     } catch (error) {
       console.log(error);
     }
-  }, [pagination.page, pagination.pageSize]);
+  }, [pagination.page, pagination.pageSize, role]);
 
   useEffect(() => {
     getOrder();
@@ -135,7 +142,16 @@ const PendingOrderSalesPage = () => {
       [record._id]: value,
     }));
   };
-
+  const handleupdateEmployeeId = async (record) => {
+    try {
+      await axiosClient.patch(`/orders/status&employeeId/${record._id}`);
+      getOrder();
+      message.success("Cập nhật trạng thái đơn hàng thành công");
+    } catch (error) {
+      message.error("Cập nhật trạng thái đơn hàng thất bại");
+      console.error("Lỗi khi cập nhật trạng thái đơn hàng: ", error);
+    }
+  };
   const columns = [
     {
       title: "STT",
@@ -206,13 +222,17 @@ const PendingOrderSalesPage = () => {
       },
     },
     {
-      title: "Ngày tạo đơn",
-      dataIndex: "createdDate",
-      key: "createdDate",
+      title: role === "SALES" ? "Ngày tạo đơn" : "Ngày tiếp nhận đơn",
+      dataIndex: role === "SALES" ? "createdDate" : "updatedAt",
+      key: role === "SALES" ? "createdDate" : "updatedAt",
       align: "center",
       responsive: ["sm"],
       render: (text, record) => (
-        <p>{moment(record.createdDate).format("DD/MM/YYYY")}</p>
+        <p>
+          {moment(
+            role === "SALES" ? record.createdDate : record.updatedAt
+          ).format("DD/MM/YYYY")}
+        </p>
       ),
     },
     {
@@ -252,24 +272,38 @@ const PendingOrderSalesPage = () => {
       render: (text, record) => {
         return (
           <div style={{ display: "flex", alignItems: "center" }}>
-            <Select
-              style={{ width: "140px", marginRight: "10px" }}
-              placeholder="Trạng thái"
-              value={selectedStatusMap[record._id]}
-              onChange={(value) => setSelectedStatus(record, value)}
-            >
-              <Option value="PREPARED">Chuẩn bị xong</Option>
-              <Option value="CANCELED">Hủy đơn hàng</Option>
-            </Select>
-            <Popconfirm
-              placement="topRight"
-              title={`Xác nhận thay đổi trạng thái đơn hàng này?`}
-              onConfirm={() => handleUpdateStatus(record)}
-              okText="Xác nhận"
-              cancelText="Hủy"
-            >
-              <Button type="dashed" icon={<CheckOutlined />} />
-            </Popconfirm>
+            {role === "SALES" ? (
+              <>
+                <Select
+                  style={{ width: "140px", marginRight: "10px" }}
+                  placeholder="Trạng thái"
+                  value={selectedStatusMap[record._id]}
+                  onChange={(value) => setSelectedStatus(record, value)}
+                >
+                  <Option value="PREPARED">Chuẩn bị xong</Option>
+                  <Option value="CANCELED">Hủy đơn hàng</Option>
+                </Select>
+                <Popconfirm
+                  placement="topRight"
+                  title={`Xác nhận thay đổi trạng thái đơn hàng này?`}
+                  onConfirm={() => handleUpdateStatus(record)}
+                  okText="Xác nhận"
+                  cancelText="Hủy"
+                >
+                  <Button type="dashed" icon={<CheckOutlined />} />
+                </Popconfirm>
+              </>
+            ) : (
+              <Popconfirm
+                placement="topRight"
+                title={`Xác nhận bạn vận chuyển đơn hàng ${record._id}?`}
+                onConfirm={() => handleupdateEmployeeId(record)}
+                okText="Xác nhận"
+                cancelText="Hủy"
+              >
+                <Button type="dashed" icon={<CheckOutlined />} />
+              </Popconfirm>
+            )}
           </div>
         );
       },
@@ -406,5 +440,7 @@ const PendingOrderSalesPage = () => {
     </main>
   );
 };
-
-export default PendingOrderSalesPage;
+PendingOrderPage.propTypes = {
+  role: PropTypes.string,
+};
+export default PendingOrderPage;

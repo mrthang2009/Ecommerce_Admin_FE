@@ -16,11 +16,9 @@ import OrderPage from "./pages/OrderPage";
 import AccountPage from "./pages/AccountPage";
 import DetailOrderPage from "./pages/DetailOrderPage";
 import OrderMePage from "./pages/OrderMePage";
-import PendingOrderSalesPage from "./pages/PendingOrderSalesPage";
-import PendingOrderShipperPage from "./pages/PendingOrderShipperPage";
 import ChangePassword from "./pages/ChangePassword";
-import RevenuePage from "./pages/RevenuePage";
 import StatisticalPage from "./pages/StatisticalPage";
+import PendingOrderPage from "./pages/PendingOrderPage";
 
 const App = () => {
   // Sử dụng useNavigate để điều hướng trang
@@ -75,7 +73,6 @@ const App = () => {
             {decodedPayload && decodedPayload.typeRole === "MANAGE" && (
               <>
                 <Route
-                  // path="/"
                   index
                   element={<StatisticalPage role={decodedPayload.typeRole} />}
                 />
@@ -93,21 +90,19 @@ const App = () => {
             {decodedPayload && decodedPayload.typeRole === "SALES" && (
               <>
                 <Route
-                  // path="/"
                   index
                   element={<StatisticalPage role={decodedPayload.typeRole} />}
                 />
                 <Route path="/create-order" element={<CreateOrder />} />
                 <Route
                   path="/pending-orders"
-                  element={<PendingOrderSalesPage />}
+                  element={<PendingOrderPage role={decodedPayload.typeRole} />}
                 />
                 <Route
                   path="/orders-me"
                   element={<OrderMePage role={decodedPayload.typeRole} />}
                 />
                 <Route path="/orders/:id" element={<DetailOrderPage />} />
-                <Route path="/revenue" element={<RevenuePage />} />
                 <Route path="/account" element={<AccountPage />} />
                 <Route path="/change-password" element={<ChangePassword />} />
               </>
@@ -115,17 +110,15 @@ const App = () => {
             {decodedPayload && decodedPayload.typeRole === "SHIPPER" && (
               <>
                 <Route
-                  // path="/"
                   index
                   element={<StatisticalPage role={decodedPayload.typeRole} />}
                 />
                 <Route path="/account" element={<AccountPage />} />
                 <Route
                   path="/pending-orders"
-                  element={<PendingOrderShipperPage />}
+                  element={<PendingOrderPage role={decodedPayload.typeRole} />}
                 />
                 <Route path="/orders/:id" element={<DetailOrderPage />} />
-                <Route path="/revenue" element={<RevenuePage />} />
                 <Route
                   path="/orders-me"
                   element={<OrderMePage role={decodedPayload.typeRole} />}
