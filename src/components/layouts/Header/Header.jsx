@@ -1,38 +1,29 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useLocation  } from "react-router-dom";
-
-
-import styles from "./Header.module.scss";
-import Navigation from "../../Navigation/Navigation";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { Dropdown } from "antd";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   DownOutlined,
 } from "@ant-design/icons";
-
+import Navigation from "../../Navigation/Navigation";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
-const Header = ({ typeRole, avatar, last_name }) => {
+
+import styles from "./Header.module.scss";
+
+const Header = ({ typeRole, avatar, lastName }) => {
   const location = useLocation();
   const [navVisible, setNavVisible] = useState(false);
-  const toggleNavVisibility = () => {
-    setNavVisible(!navVisible);
-  };
-  useEffect(() => {
-    // Thực hiện thay đổi trạng thái menu dựa trên location.pathname
-    setNavVisible(false);
-  }, [location.pathname]);
-  // Sử dụng useNavigate để điều hướng trang
+  const toggleNavVisibility = () => setNavVisible(!navVisible);
   const navigate = useNavigate();
+
   const handleLogout = () => {
-    // Xóa token và refreshToken từ localStorage
     localStorage.removeItem("TOKEN");
     localStorage.removeItem("REFRESH_TOKEN");
-    // Điều hướng người dùng đến trang đăng nhập
     navigate("/login");
   };
-  const items = [
+
+  const menuItems = [
     {
       key: "1",
       label: <Link to="/account">Thông tin cá nhân</Link>,
@@ -42,6 +33,10 @@ const Header = ({ typeRole, avatar, last_name }) => {
       label: <span onClick={handleLogout}>Đăng xuất</span>,
     },
   ];
+
+  useEffect(() => {
+    setNavVisible(false);
+  }, [location.pathname]);
 
   return (
     <header>
@@ -53,43 +48,34 @@ const Header = ({ typeRole, avatar, last_name }) => {
               alt=""
             />
           </Link>
-          {!navVisible ? (
-            <i onClick={toggleNavVisibility}>
-              <MenuUnfoldOutlined />
-            </i>
-          ) : (
-            <i onClick={toggleNavVisibility}>
-              <MenuFoldOutlined />
-            </i>
-          )}
+          <i onClick={toggleNavVisibility}>
+            {navVisible ? <MenuFoldOutlined /> : <MenuUnfoldOutlined />}
+          </i>
         </div>
-        <>
-          <Dropdown
-            menu={{
-              items,
-            }}
-            placement="bottomRight"
-            arrow
-          >
-            <div className={styles.header_right}>
-              <img className={styles.avatar} src={avatar} alt="" />
-              <p>{last_name}</p>
-              <DownOutlined />
-            </div>
-          </Dropdown>
-        </>
+        <Dropdown
+          menu={{ items: menuItems }}
+          placement="bottomRight"
+          arrow
+        >
+          <div className={styles.header_right}>
+            <img className={styles.avatar} src={avatar} alt={avatar} />
+            <p>{lastName}</p>
+            <DownOutlined />
+          </div>
+        </Dropdown>
       </div>
 
       <nav className={`${styles.nav} ${navVisible ? styles.navVisible : ""}`}>
-        <Navigation role={typeRole} setMenuVisible/>
+        <Navigation role={typeRole}/>
       </nav>
     </header>
   );
 };
+
 Header.propTypes = {
   typeRole: PropTypes.string,
   avatar: PropTypes.string,
-  last_name: PropTypes.string,
+  lastName: PropTypes.string,
 };
 
 export default Header;
