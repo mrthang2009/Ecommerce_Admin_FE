@@ -296,7 +296,7 @@ const PendingOrderPage = ({ role }) => {
             ) : (
               <Popconfirm
                 placement="topRight"
-                title={`Xác nhận bạn vận chuyển đơn hàng ${record._id}?`}
+                title={`Xác nhận bạn vận chuyển đơn hàng này?`}
                 onConfirm={() => handleupdateEmployeeId(record)}
                 okText="Xác nhận"
                 cancelText="Hủy"
