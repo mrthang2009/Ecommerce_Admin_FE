@@ -2,6 +2,7 @@ import { useState } from "react";
 import { message, Upload, Button, Row } from "antd";
 import { PlusOutlined, LoadingOutlined } from "@ant-design/icons";
 import PropTypes from "prop-types";
+import axios from 'axios';
 
 const getBase64 = (img, callback) => {
   const reader = new FileReader();
@@ -19,11 +20,12 @@ const beforeUpload = (file) => {
     message.error("Hình ảnh phải nhỏ hơn 2MB!");
   }
   return isJpgOrPng && isLt2M;
+  
 };
-
 const AvatarUpload = ({ handleCancel }) => {
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState();
+  const [file, setFile] = useState(null); // Thêm biến state để lưu trữ đối tượng file
 
   const handleChange = (info) => {
     if (info.file.status === "uploading") {
@@ -34,21 +36,19 @@ const AvatarUpload = ({ handleCancel }) => {
       getBase64(info.file.originFileObj, (url) => {
         setImageUrl(url);
         setLoading(false);
+        setFile(info.file); // Lưu trữ đối tượng file vào state
       });
     }
   };
 
   const handleSave = async () => {
     try {
-      if (!imageUrl) {
+      if (!imageUrl || !file) {
         message.error("Chưa có ảnh để lưu.");
         return;
       }
 
-      // Lấy đối tượng File từ URL của ảnh
-      const response = await fetch(imageUrl);
-      const blob = await response.blob();
-      const file = new File([blob], "avatar.jpg", { type: "image/jpeg" });
+      console.log("««««« file »»»»»", file);
 
       // Tạo đối tượng FormData và thêm dữ liệu vào đó
       const formData = new FormData();
@@ -56,20 +56,16 @@ const AvatarUpload = ({ handleCancel }) => {
       console.log("««««« formData »»»»»", formData);
 
       // Thực hiện yêu cầu POST đến API
-      const postResponse = await fetch(
+      const postResponse = await axios.post(
         "http://localhost:9000/medias/upload-avatar-me",
-        {
-          method: "POST",
-          body: formData,
-        }
+        formData,
+        { headers: { 'Content-Type': 'multipart/form-data' } }
       );
 
-      if (postResponse.ok) {
-        // Xử lý thành công
+      if (postResponse.status === 200) {
         message.success("Lưu ảnh đại diện thành công");
       } else {
-        // Xử lý lỗi
-        const errorData = await postResponse.json();
+        const errorData = postResponse.data;
         message.error(`Lưu ảnh đại diện thất bại: ${errorData.message}`);
       }
     } catch (error) {
@@ -98,6 +94,7 @@ const AvatarUpload = ({ handleCancel }) => {
         listType="picture-circle"
         className="avatar-uploader"
         showUploadList={false}
+        // action="http://localhost:9000/medias/upload-avatar-me"
         action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
         beforeUpload={beforeUpload}
         onChange={handleChange}
