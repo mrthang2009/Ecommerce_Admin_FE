@@ -102,7 +102,14 @@ const CustomerPage = () => {
   // Hàm để xử lý để tắt Modal
   // const handleCancel = () => {
   //   setAddCustomerModalVisible(false);
-  // };
+  //.name_employeeconst getInitials = (firstName, lastName) => {
+  const getInitials = (firstName, lastName) => {
+    const initials =
+      (firstName ? firstName.charAt(0) : "") +
+      (lastName ? lastName.charAt(0) : "");
+    return initials.toUpperCase();
+  };
+
   // Cấu hình cột dữ liệu của bảng
   const columns = [
     {
@@ -127,16 +134,30 @@ const CustomerPage = () => {
       key: "name",
       align: "center",
       width: "200px",
-      render: (text, record) => (
-        <span className={styles.name_customer}>
-          <img
-            src={record.media?.coverImageUrl}
-            alt={record.fullName}
-            className={styles.avatar}
-          />
-          {record.fullName}
-        </span>
-      ),
+      render: (text, record) => {
+        const avatarContent = record.avatar ? (
+          <div className={styles.customAvatar}>
+            <img src={record.avatar.avatarUrl} alt={record.fullName} />
+          </div>
+        ) : (
+          <div
+            className={styles.customAvatar}
+            style={{ backgroundColor: "#FFC522" }}
+          >
+            <p>{getInitials(record.firstName, record.lastName)}</p>
+          </div>
+        );
+
+        return (
+          <span
+            className={styles.name_customer}
+            style={{ display: "flex", alignItems: "center" }}
+          >
+            {avatarContent}
+            {record.fullName}
+          </span>
+        );
+      },
     },
     {
       title: "Số điện thoại",

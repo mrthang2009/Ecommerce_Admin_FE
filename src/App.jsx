@@ -70,6 +70,7 @@ const App = () => {
                 userRole={decodedPayload.typeRole}
                 userAvatar={decodedPayload.avatar}
                 userLastName={decodedPayload.lastName}
+                userFirstName={decodedPayload.firstName}
               />
             }
           >

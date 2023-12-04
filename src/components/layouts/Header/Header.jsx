@@ -11,7 +11,7 @@ import PropTypes from "prop-types";
 
 import styles from "./Header.module.scss";
 
-const Header = ({ typeRole, avatar, lastName }) => {
+const Header = ({ typeRole, avatar, firstName, lastName }) => {
   const location = useLocation();
   const [navVisible, setNavVisible] = useState(false);
   const toggleNavVisibility = () => setNavVisible(!navVisible);
@@ -37,7 +37,12 @@ const Header = ({ typeRole, avatar, lastName }) => {
   useEffect(() => {
     setNavVisible(false);
   }, [location.pathname]);
-
+  const getInitials = (firstName, lastName) => {
+    const initials =
+      (firstName ? firstName.charAt(0) : "") +
+      (lastName ? lastName.charAt(0) : "");
+    return initials.toUpperCase();
+  };
   return (
     <header>
       <div className={styles.header_middle}>
@@ -52,21 +57,29 @@ const Header = ({ typeRole, avatar, lastName }) => {
             {navVisible ? <MenuFoldOutlined /> : <MenuUnfoldOutlined />}
           </i>
         </div>
-        <Dropdown
-          menu={{ items: menuItems }}
-          placement="bottomRight"
-          arrow
-        >
+        <Dropdown menu={{ items: menuItems }} placement="bottomRight" arrow>
           <div className={styles.header_right}>
-            <img className={styles.avatar} src={avatar} alt={avatar} />
-            <p>{lastName}</p>
-            <DownOutlined />
+            <div className={styles.box_avatar}>
+              {!avatar ? (
+                <div
+                  className={styles.customAvatar}
+                  style={{ backgroundColor: "#FFC522" }}
+                >
+                  <p>{getInitials(firstName, lastName)}</p>
+                </div>
+              ) : (
+                <div className={styles.customAvatar}>
+                  <img src={avatar} alt={lastName} />
+                </div>
+              )}
+              <DownOutlined />
+            </div>
           </div>
         </Dropdown>
       </div>
 
       <nav className={`${styles.nav} ${navVisible ? styles.navVisible : ""}`}>
-        <Navigation role={typeRole}/>
+        <Navigation role={typeRole} />
       </nav>
     </header>
   );
@@ -76,6 +89,7 @@ Header.propTypes = {
   typeRole: PropTypes.string,
   avatar: PropTypes.string,
   lastName: PropTypes.string,
+  firstName: PropTypes.string,
 };
 
 export default Header;

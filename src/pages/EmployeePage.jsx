@@ -25,7 +25,6 @@ import {
 } from "@ant-design/icons";
 import moment from "moment";
 import "moment/locale/vi"; // Import the locale you want to use, for example, 'vi'
-
 import styles from "./stylesPage/EmployeePage.module.scss";
 import EmployeeForm from "../components/EmployeeForm/EmployeeForm";
 const DEFAULT_LIMIT = 8;
@@ -155,6 +154,12 @@ const EmployeePage = () => {
       setLoadings([false]);
     }
   };
+  const getInitials = (firstName, lastName) => {
+    const initials =
+      (firstName ? firstName.charAt(0) : "") +
+      (lastName ? lastName.charAt(0) : "");
+    return initials.toUpperCase();
+  };
   // Cấu hình cột dữ liệu của bảng
   const columns = [
     {
@@ -178,20 +183,32 @@ const EmployeePage = () => {
       dataIndex: "name",
       key: "name",
       align: "center",
-      render: (text, record) => (
-        <span
-          className={styles.name_employee}
-          style={{ display: "flex", alignItems: "center" }}
-        >
-          <img
-            src={record.media?.coverImageUrl}
-            alt={record.fullName}
-            className={styles.avatar}
-          />
-          {record.fullName}
-        </span>
-      ),
+      render: (text, record) => {
+        const avatarContent = record.avatar ? (
+          <div className={styles.customAvatar}>
+            <img src={record.avatar.avatarUrl} alt={record.fullName} />
+          </div>
+        ) : (
+          <div
+            className={styles.customAvatar}
+            style={{ backgroundColor: "#FFC522" }}
+          >
+            <p>{getInitials(record.firstName, record.lastName)}</p>
+          </div>
+        );
+
+        return (
+          <span
+            className={styles.name_employee}
+            style={{ display: "flex", alignItems: "center" }}
+          >
+            {avatarContent}
+            {record.fullName}
+          </span>
+        );
+      },
     },
+
     {
       title: "Chức vụ",
       dataIndex: "typeRole",
@@ -279,9 +296,7 @@ const EmployeePage = () => {
       <Card>
         <Row gutter={16} justify="space-between" align="middle">
           <Col xs={24} sm={24} md={16} lg={18} xl={12}>
-            <Form.Item
-              label="Tìm kiếm nhân viên"
-            >
+            <Form.Item label="Tìm kiếm nhân viên">
               <Input
                 placeholder="Nhập tên hoặc email hoặc số điện thoại"
                 value={searchKeyword}
