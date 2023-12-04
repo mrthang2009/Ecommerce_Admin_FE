@@ -3,11 +3,11 @@ import { useEffect, useState, useCallback } from "react";
 import {
   Divider,
   Card,
-  Button,
+  // Button,
   Table,
   Pagination,
-  Modal,
-  message,
+  // Modal,
+  // message,
   Spin,
   Input,
   Form,
@@ -16,12 +16,12 @@ import {
 } from "antd";
 import {
   WarningOutlined,
-  UserAddOutlined,
+  // UserAddOutlined,
   SearchOutlined,
   LoadingOutlined,
 } from "@ant-design/icons";
 import styles from "./stylesPage/CustomerPage.module.scss";
-import CustomerForm from "../components/CustomerForm/CustomerForm";
+// import CustomerForm from "../components/CustomerForm/CustomerForm";
 
 import numeral from "numeral";
 import "numeral/locales/vi";
@@ -29,7 +29,7 @@ numeral.locale("vi");
 const DEFAULT_LIMIT = 8;
 const CustomerPage = () => {
   //Trạng thái loading của button
-  const [loadings, setLoadings] = useState([false]);
+  // const [loadings, setLoadings] = useState([false]);
   const [loading, setLoading] = useState(false);
   // Phân trang
   const [pagination, setPagination] = useState({
@@ -61,7 +61,7 @@ const CustomerPage = () => {
     }
   };
 
-  const [addCustomerModalVisible, setAddCustomerModalVisible] = useState(false);
+  // const [addCustomerModalVisible, setAddCustomerModalVisible] = useState(false);
   // Hàm để lấy danh sách khách hàng từ API
   const getCustomers = useCallback(async () => {
     try {
@@ -82,27 +82,27 @@ const CustomerPage = () => {
     getCustomers();
   }, [getCustomers]);
   // Hàm để xử lý khi tạo khách hàng mới
-  const handleCreate = async (values) => {
-    try {
-      setLoadings([true]);
-      await axiosClient.post("/customers/create", values);
-      if (searchResult.length > 0) {
-        searchCustomer();
-      }
-      getCustomers();
-      setAddCustomerModalVisible(false);
-      message.success("Tạo khách hàng mới thành công");
-      setLoadings([false]);
-    } catch (error) {
-      message.error("Tạo khách hàng mới thất bại");
-      console.error("Lỗi khi tạo khách hàng: ", error);
-      setLoadings([false]);
-    }
-  };
+  // const handleCreate = async (values) => {
+  //   try {
+  //     setLoadings([true]);
+  //     await axiosClient.post("/customers/create", values);
+  //     if (searchResult.length > 0) {
+  //       searchCustomer();
+  //     }
+  //     getCustomers();
+  //     setAddCustomerModalVisible(false);
+  //     message.success("Tạo khách hàng mới thành công");
+  //     setLoadings([false]);
+  //   } catch (error) {
+  //     message.error("Tạo khách hàng mới thất bại");
+  //     console.error("Lỗi khi tạo khách hàng: ", error);
+  //     setLoadings([false]);
+  //   }
+  // };
   // Hàm để xử lý để tắt Modal
-  const handleCancel = () => {
-    setAddCustomerModalVisible(false);
-  };
+  // const handleCancel = () => {
+  //   setAddCustomerModalVisible(false);
+  // };
   // Cấu hình cột dữ liệu của bảng
   const columns = [
     {
@@ -256,7 +256,7 @@ const CustomerPage = () => {
               />
             </Form.Item>
           </Col>
-          <Col xs={24} sm={24} md={5} lg={5} xl={4}>
+          {/* <Col xs={24} sm={24} md={5} lg={5} xl={4}>
             <Button
               icon={<UserAddOutlined />}
               type="link"
@@ -264,7 +264,7 @@ const CustomerPage = () => {
             >
               Thêm khách hàng
             </Button>
-          </Col>
+          </Col> */}
         </Row>
 
         <Divider />
@@ -308,7 +308,7 @@ const CustomerPage = () => {
         )}
       </Card>
 
-      <Modal
+      {/* <Modal
         title="Tạo khách hàng mới"
         open={addCustomerModalVisible}
         onCancel={() => setAddCustomerModalVisible(false)}
@@ -320,7 +320,7 @@ const CustomerPage = () => {
           handleCancel={handleCancel}
           nameSubmit="Tạo"
         />
-      </Modal>
+      </Modal> */}
     </main>
   );
 };

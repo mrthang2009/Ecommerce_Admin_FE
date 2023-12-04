@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback} from "react";
-import { Link } from 'react-router-dom';
+import { useState, useEffect, useCallback } from "react";
+import { Link } from "react-router-dom";
 import {
   Table,
   Button,
@@ -16,10 +16,7 @@ import {
   Pagination,
 } from "antd";
 
-import {
-  WarningOutlined,
-  CloseOutlined,
-} from "@ant-design/icons";
+import { WarningOutlined, CloseOutlined } from "@ant-design/icons";
 import axiosClient from "../libraries/axiosClient";
 
 import numeral from "numeral";
@@ -268,6 +265,8 @@ const OrderPage = () => {
     setPaymentType("");
     setStartDate(null);
     setEndDate(null);
+    setFilterResult([]);
+    setNoFilterResult(false);
     getOrder();
   };
   return (

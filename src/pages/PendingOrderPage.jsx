@@ -80,7 +80,7 @@ const PendingOrderPage = ({ role }) => {
         status = "PREPARED";
       }
       const res = await axiosClient.get(
-        `/orders/pending-sales?page=${pagination.page}&pageSize=${pagination.pageSize}&status=${status}`
+        `/orders/pending?page=${pagination.page}&pageSize=${pagination.pageSize}&status=${status}`
       );
       setOrders(res.data.payload);
       setPagination((prev) => ({
@@ -315,6 +315,8 @@ const PendingOrderPage = ({ role }) => {
     setPaymentType("");
     setStartDate(null);
     setEndDate(null);
+    setFilterResult([]);
+    setNoFilterResult(false);
     getOrder();
   };
 

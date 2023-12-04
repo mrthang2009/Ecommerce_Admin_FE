@@ -67,7 +67,6 @@ const ProductPage = () => {
       );
 
       const Results = res.data.payload || [];
-      // console.log("««««« filterResults »»»»»", Results);
       setFilterResult(Results);
       // Nếu không có kết quả tìm kiếm, đặt giá trị noFilterResult thành true
       setNoFilterResult(Results.length === 0);
@@ -319,7 +318,9 @@ const ProductPage = () => {
     setSelectedCategory("");
     setSortPrice("");
     setSortDiscount("");
-    filterProducts();
+    setFilterResult([]);
+    setNoFilterResult(false);
+    getProducts();
   };
   const [detailModalOpen, setDetailModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);

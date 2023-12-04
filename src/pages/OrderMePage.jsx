@@ -325,6 +325,8 @@ const OrderMePage = ({ role }) => {
     setPaymentType("");
     setStartDate(null);
     setEndDate(null);
+    setFilterResult([]);
+    setNoFilterResult(false);
     getOrder();
   };
   return (
