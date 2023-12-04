@@ -135,7 +135,10 @@ const SupplierPage = () => {
       handleSearch();
     }
   };
-
+  const getInitials = (name) => {
+    const initials = name.charAt(0);
+    return initials.toUpperCase();
+  };
   const columns = [
     {
       title: "STT",
@@ -150,16 +153,30 @@ const SupplierPage = () => {
       dataIndex: "name",
       key: "name",
       align: "center",
-      render: (text, record) => (
-        <span className={styles.name_supplier}>
-          <img
-            src={record.media?.coverImageUrl}
-            alt={record.name}
-            className={styles.avatar}
-          />
-          <p>{record.name}</p>
-        </span>
-      ),
+      render: (text, record) => {
+        const avatarContent = record.media ? (
+          <div className={styles.customCoverImage}>
+            <img src={record.media.coverImageUrl} alt={record.name} />
+          </div>
+        ) : (
+          <div
+            className={styles.customCoverImage}
+            style={{ backgroundColor: "#FFC522" }}
+          >
+            <p>{getInitials(record.name)}</p>
+          </div>
+        );
+
+        return (
+          <span
+            className={styles.name_supplier}
+            style={{ display: "flex", alignItems: "center" }}
+          >
+            {avatarContent}
+            {record.name}
+          </span>
+        );
+      },
     },
     {
       title: "Email",
@@ -181,7 +198,7 @@ const SupplierPage = () => {
       dataIndex: "address",
       key: "address",
       align: "center",
-      responsive: ["sm"],
+      responsive: ["lg"],
       render: (text, record) => (
         <p className={styles.address}>{record.address}</p>
       ),

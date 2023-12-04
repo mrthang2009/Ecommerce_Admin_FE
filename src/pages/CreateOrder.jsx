@@ -131,7 +131,9 @@ const ProductPage = () => {
     setSelectedCategory("");
     setSortPrice("");
     setSortDiscount("");
-    filterProducts();
+    setFilterResult([]);
+    setNoFilterResult(false);
+    getProducts();
   };
   const [cartItems, setCartItems] = useState([]);
 
