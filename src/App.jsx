@@ -42,8 +42,6 @@ const App = () => {
         setDecodedPayload(decodedPayload);
         console.log("««««« decodedPayload »»»»»", decodedPayload);
         setHasDecodedToken(true); // Đánh dấu rằng đã giải mã token
-      } else {
-        setHasDecodedToken(false);
       }
     } else if (!token) {
       // Nếu không có token, điều hướng đến trang đăng nhập
