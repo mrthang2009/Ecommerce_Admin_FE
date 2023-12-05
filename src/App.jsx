@@ -80,6 +80,8 @@ const App = () => {
                   index
                   element={<StatisticalPage role={decodedPayload.typeRole} />}
                 />
+              {/* Log decodedPayload.typeRole */}
+              {console.log("««««« decodedPayload.typeRole »»»»»", decodedPayload.typeRole)}
                 <Route path="/orders" element={<OrderPage />} />
                 <Route path="/orders/:id" element={<DetailOrderPage />} />
                 <Route path="/products" element={<ProductPage />} />
