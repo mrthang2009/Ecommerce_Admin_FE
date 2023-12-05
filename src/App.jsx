@@ -56,7 +56,7 @@ const App = () => {
     };
   
     fetchData();
-  }, []);
+  }, [token]);
   console.log('««««« token »»»»»', token);
 
   return (
