@@ -23,8 +23,8 @@ const App = () => {
   // Sử dụng useNavigate để điều hướng trang
   const navigate = useNavigate();
 
-  // Lấy token từ local storage
-  const token = localStorage.getItem("TOKEN");
+  // // Lấy token từ local storage
+  // const token = localStorage.getItem("TOKEN");
 
   // Sử dụng state để lưu thông tin giải mã từ token và trạng thái đã giải mã token hay chưa
   const [decodedPayload, setDecodedPayload] = useState(null);
@@ -33,6 +33,8 @@ const App = () => {
   // Hàm để giải mã token và thiết lập decodedPayload
   const getDecodedPayload = () => {
     console.log("««««« token »»»»»", token);
+    // Lấy token từ local storage
+    const token = localStorage.getItem("TOKEN");
     if (token && !hasDecodedToken) {
       // Giải mã token chỉ khi token tồn tại và chưa giải mã
       // Thiết lập token cho axiosClient để gửi trong mọi yêu cầu
