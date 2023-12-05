@@ -32,7 +32,6 @@ const App = () => {
 
   // Hàm để giải mã token và thiết lập decodedPayload
   const getDecodedPayload = () => {
-    console.log("««««« token »»»»»", token);
     if (token && !hasDecodedToken) {
       // Giải mã token chỉ khi token tồn tại và chưa giải mã
       // Thiết lập token cho axiosClient để gửi trong mọi yêu cầu
@@ -51,6 +50,7 @@ const App = () => {
 
   // Sử dụng useEffect để gọi getDecodedPayload khi component được render
   useEffect(() => {
+    console.log("««««« token »»»»»", token);
     const fetchData = async () => {
       await getDecodedPayload();
       setHasDecodedToken(false);
