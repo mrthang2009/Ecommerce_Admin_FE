@@ -1,5 +1,5 @@
 import { useCallback, useState, useEffect } from "react";
-import styles from "../pages/stylesPage/AccountPage.module.css";
+import styles from "../pages/stylesPage/AccountPage.module.scss";
 import {
   Card,
   Divider,
@@ -96,6 +96,12 @@ const AccountPage = () => {
       console.error("Lỗi khi cập nhật nhân viên: ", error);
     }
   };
+  const getInitials = (firstName, lastName) => {
+    const initials =
+      (firstName ? firstName.charAt(0) : "") +
+      (lastName ? lastName.charAt(0) : "");
+    return initials.toUpperCase();
+  };
   return (
     <main className="container">
       <Card>
@@ -169,7 +175,21 @@ const AccountPage = () => {
                 </Row>
               </div>
               <div className={styles.box_right}>
-                <img src={detailMe.avatar?.avatarUrl} alt="Avatar" />
+                {!detailMe.avatar ? (
+                  <div
+                    className={styles.customAvatar}
+                    style={{ backgroundColor: "#FFC522" }}
+                  >
+                    <p>{getInitials(detailMe.firstName, detailMe.lastName)}</p>
+                  </div>
+                ) : (
+                  <div className={styles.customAvatar}>
+                    <img
+                      src={detailMe.avatar.avatarUrl}
+                      alt={detailMe.lastName}
+                    />
+                  </div>
+                )}
                 <p>Hình ảnh đại diện</p>
               </div>
             </div>

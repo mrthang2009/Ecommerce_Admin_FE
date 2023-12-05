@@ -1,0 +1,95 @@
+.top_content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.content {
+    display: flex;
+    width: 100%;
+    align-items: center;
+
+    .box_left {
+        width: 60%;
+        border-right: 1px solid #F0F0F0;
+    }
+
+    .box_right {
+        width: 40%;
+        text-align: center;
+
+        .customAvatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 50%;
+            }
+
+            p {
+                font-size: 38px;
+                font-weight: bold;
+                color: #E31837;
+                text-align: center;
+                padding-top: 20px;
+            }
+
+        }
+    }
+}
+
+
+.loading {
+    text-align: center;
+}
+
+/* CSS cho trạng thái mobile */
+@media only screen and (max-width: 430px) {
+    .tittle {
+        width: 60%;
+    }
+
+    .content {
+        display: inline-block;
+
+        .box_left {
+            width: 100%;
+            border-right: none;
+            border-bottom: 1px solid #F0F0F0;
+            padding-bottom: 20px;
+        }
+
+        .box_right {
+            width: 100%;
+            margin-top: 20px;
+        }
+    }
+}
+
+/* CSS cho trạng thái mobile S*/
+@media only screen and (max-width: 320px) {
+    .tittle {
+        width: 40%;
+    }
+
+    .content {
+        display: inline-block;
+
+        .box_left {
+            width: 100%;
+            border-right: none;
+        }
+
+        .box_right {
+            width: 100%;
+            margin-top: 30px;
+        }
+    }
+
+}
