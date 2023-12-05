@@ -18,7 +18,7 @@ import DetailOrderPage from "./pages/DetailOrderPage";
 import OrderMePage from "./pages/OrderMePage";
 import ChangePassword from "./pages/ChangePassword";
 import StatisticalPage from "./pages/StatisticalPage";
-import PendingOrderPage from"./pages/PendingOrderPage"
+import PendingOrderPage from "./pages/PendingOrderPage";
 const App = () => {
   // Sử dụng useNavigate để điều hướng trang
   const navigate = useNavigate();
@@ -39,7 +39,7 @@ const App = () => {
       const decodedPayload = decodeToken(token); // Sử dụng hàm decodeToken để giải mã token
       if (decodedPayload) {
         setDecodedPayload(decodedPayload);
-        console.log('««««« decodedPayload »»»»»', decodedPayload);
+        console.log("««««« decodedPayload »»»»»", decodedPayload);
         setHasDecodedToken(true); // Đánh dấu rằng đã giải mã token
       }
     } else if (!token) {
@@ -54,10 +54,10 @@ const App = () => {
       await getDecodedPayload();
       setHasDecodedToken(false);
     };
-  
+
     fetchData();
-  }, [token]);
-  console.log('««««« token »»»»»', token);
+  }, [token, hasDecodedToken]);
+  console.log("««««« token »»»»»", token);
 
   return (
     <>
@@ -100,7 +100,7 @@ const App = () => {
                 <Route path="/create-order" element={<CreateOrder />} />
                 <Route
                   path="/pending-orders"
-                  element={<PendingOrderPage role={decodedPayload.typeRole}/>}
+                  element={<PendingOrderPage role={decodedPayload.typeRole} />}
                 />
                 <Route
                   path="/orders-me"
@@ -120,7 +120,7 @@ const App = () => {
                 <Route path="/account" element={<AccountPage />} />
                 <Route
                   path="/pending-orders"
-                  element={<PendingOrderPage role={decodedPayload.typeRole}/>}
+                  element={<PendingOrderPage role={decodedPayload.typeRole} />}
                 />
                 <Route path="/orders/:id" element={<DetailOrderPage />} />
                 <Route
