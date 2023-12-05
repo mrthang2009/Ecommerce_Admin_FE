@@ -59,105 +59,105 @@ const App = () => {
     fetchData();
   }, [token]);
 
-  const renderManageRoutes = () => (
-    <>
-      <Route
-        path="/"
-        element={
-          <Layout
-            userRole={decodedPayload.typeRole}
-            userAvatar={decodedPayload.avatar}
-            userLastName={decodedPayload.lastName}
-            userFirstName={decodedPayload.firstName}
-          />
-        }
-      >
-        <Route
-          index
-          element={<StatisticalPage role={decodedPayload.typeRole} />}
-        />
-        <Route path="/orders" element={<OrderPage />} />
-        <Route path="/orders/:id" element={<DetailOrderPage />} />
-        <Route path="/products" element={<ProductPage />} />
-        <Route path="/categories" element={<CategoryPage />} />
-        <Route path="/employees" element={<EmployeePage />} />
-        <Route path="/customers" element={<CustomerPage />} />
-        <Route path="/suppliers" element={<SupplierPage />} />
-        <Route path="/account" element={<AccountPage />} />
-        <Route path="/change-password" element={<ChangePassword />} />
-      </Route>
-    </>
-  );
+  // const renderManageRoutes = () => (
+  //   <>
+  //     <Route
+  //       path="/"
+  //       element={
+  //         <Layout
+  //           userRole={decodedPayload.typeRole}
+  //           userAvatar={decodedPayload.avatar}
+  //           userLastName={decodedPayload.lastName}
+  //           userFirstName={decodedPayload.firstName}
+  //         />
+  //       }
+  //     >
+  //       <Route
+  //         index
+  //         element={<StatisticalPage role={decodedPayload.typeRole} />}
+  //       />
+  //       <Route path="/orders" element={<OrderPage />} />
+  //       <Route path="/orders/:id" element={<DetailOrderPage />} />
+  //       <Route path="/products" element={<ProductPage />} />
+  //       <Route path="/categories" element={<CategoryPage />} />
+  //       <Route path="/employees" element={<EmployeePage />} />
+  //       <Route path="/customers" element={<CustomerPage />} />
+  //       <Route path="/suppliers" element={<SupplierPage />} />
+  //       <Route path="/account" element={<AccountPage />} />
+  //       <Route path="/change-password" element={<ChangePassword />} />
+  //     </Route>
+  //   </>
+  // );
 
-  const renderSalesRoutes = () => (
-    <>
-      <Route
-        path="/"
-        element={
-          <Layout
-            userRole={decodedPayload.typeRole}
-            userAvatar={decodedPayload.avatar}
-            userLastName={decodedPayload.lastName}
-            userFirstName={decodedPayload.firstName}
-          />
-        }
-      >
-        <Route
-          index
-          element={<StatisticalPage role={decodedPayload.typeRole} />}
-        />
-        <Route path="/create-order" element={<CreateOrder />} />
-        <Route
-          path="/pending-orders"
-          element={<PendingOrderPage role={decodedPayload.typeRole} />}
-        />
-        <Route
-          path="/orders-me"
-          element={<OrderMePage role={decodedPayload.typeRole} />}
-        />
-        <Route path="/orders/:id" element={<DetailOrderPage />} />
-        <Route path="/account" element={<AccountPage />} />
-        <Route path="/change-password" element={<ChangePassword />} />
-      </Route>
-    </>
-  );
+  // const renderSalesRoutes = () => (
+  //   <>
+  //     <Route
+  //       path="/"
+  //       element={
+  //         <Layout
+  //           userRole={decodedPayload.typeRole}
+  //           userAvatar={decodedPayload.avatar}
+  //           userLastName={decodedPayload.lastName}
+  //           userFirstName={decodedPayload.firstName}
+  //         />
+  //       }
+  //     >
+  //       <Route
+  //         index
+  //         element={<StatisticalPage role={decodedPayload.typeRole} />}
+  //       />
+  //       <Route path="/create-order" element={<CreateOrder />} />
+  //       <Route
+  //         path="/pending-orders"
+  //         element={<PendingOrderPage role={decodedPayload.typeRole} />}
+  //       />
+  //       <Route
+  //         path="/orders-me"
+  //         element={<OrderMePage role={decodedPayload.typeRole} />}
+  //       />
+  //       <Route path="/orders/:id" element={<DetailOrderPage />} />
+  //       <Route path="/account" element={<AccountPage />} />
+  //       <Route path="/change-password" element={<ChangePassword />} />
+  //     </Route>
+  //   </>
+  // );
 
-  const renderShipperRoutes = () => (
-    <>
-      <Route
-        path="/"
-        element={
-          <Layout
-            userRole={decodedPayload.typeRole}
-            userAvatar={decodedPayload.avatar}
-            userLastName={decodedPayload.lastName}
-            userFirstName={decodedPayload.firstName}
-          />
-        }
-      >
-        <Route
-          index
-          element={<StatisticalPage role={decodedPayload.typeRole} />}
-        />
-        <Route path="/account" element={<AccountPage />} />
-        <Route
-          path="/pending-orders"
-          element={<PendingOrderPage role={decodedPayload.typeRole} />}
-        />
-        <Route path="/orders/:id" element={<DetailOrderPage />} />
-        <Route
-          path="/orders-me"
-          element={<OrderMePage role={decodedPayload.typeRole} />}
-        />
-        <Route path="/account" element={<AccountPage />} />
-        <Route path="/change-password" element={<ChangePassword />} />
-      </Route>
-    </>
-  );
+  // const renderShipperRoutes = () => (
+  //   <>
+  //     <Route
+  //       path="/"
+  //       element={
+  //         <Layout
+  //           userRole={decodedPayload.typeRole}
+  //           userAvatar={decodedPayload.avatar}
+  //           userLastName={decodedPayload.lastName}
+  //           userFirstName={decodedPayload.firstName}
+  //         />
+  //       }
+  //     >
+  //       <Route
+  //         index
+  //         element={<StatisticalPage role={decodedPayload.typeRole} />}
+  //       />
+  //       <Route path="/account" element={<AccountPage />} />
+  //       <Route
+  //         path="/pending-orders"
+  //         element={<PendingOrderPage role={decodedPayload.typeRole} />}
+  //       />
+  //       <Route path="/orders/:id" element={<DetailOrderPage />} />
+  //       <Route
+  //         path="/orders-me"
+  //         element={<OrderMePage role={decodedPayload.typeRole} />}
+  //       />
+  //       <Route path="/account" element={<AccountPage />} />
+  //       <Route path="/change-password" element={<ChangePassword />} />
+  //     </Route>
+  //   </>
+  // );
 
   return (
     <>
-      {/* <Routes>
+      <Routes>
         {token && decodedPayload ? (
           <Route
             path="/"
@@ -235,8 +235,8 @@ const App = () => {
         ) : (
           <Route path="/login" element={<LoginPage />} />
         )}
-      </Routes> */}
-      <Routes>
+      </Routes>
+      {/* <Routes>
         {token && decodedPayload ? (
           <>
             {decodedPayload.typeRole === "MANAGE" && renderManageRoutes()}
@@ -246,7 +246,7 @@ const App = () => {
         ) : (
           <Route path="/login" element={<LoginPage />} />
         )}
-      </Routes>
+      </Routes> */}
     </>
   );
 };
