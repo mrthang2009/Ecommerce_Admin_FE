@@ -49,12 +49,13 @@ const App = () => {
 
   // Sử dụng useEffect để gọi getDecodedPayload khi component được render
   useEffect(() => {
-    const fetchData = () => {
-      getDecodedPayload();
+    const fetchData = async () => {
+      await getDecodedPayload();
       setHasDecodedToken(false);
     };
+
     fetchData();
-  }, []);
+  }, [token, ]);
 
   return (
     <>

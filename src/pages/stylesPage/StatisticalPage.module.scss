@@ -3,6 +3,7 @@
     height: 80vh;
     margin-bottom: 20px;
 }
+
 .title {
     display: flex;
     align-items: center;
@@ -11,20 +12,13 @@
     .action {
         display: flex;
         align-items: center;
-
-        p {
-            margin-right: 6px;
-        }
+        column-gap: 10px;
     }
 }
+
 @media only screen and (max-width: 768px) {
     .title {
         display: inline-block;
-    
-        .action { 
-            p {
-                margin-left: 0;
-            }
-        }
+        margin-bottom: 8px;
     }
 }
