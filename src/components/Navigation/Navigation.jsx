@@ -103,6 +103,8 @@ const Navigation = ({ role }) => {
 
   const displayMenu = isUserProfilePage ? commonProfileMenu : items;
 
+  console.log('««««« items »»»»»', items);
+
   return (
     <>
       <Helmet>
