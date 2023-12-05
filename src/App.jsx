@@ -24,7 +24,7 @@ const App = () => {
   const navigate = useNavigate();
 
   // Lấy token từ local storage
-  const token = localStorage.getItem("TOKEN");
+  const token = window.localStorage.getItem("TOKEN");
 
   // Sử dụng state để lưu thông tin giải mã từ token và trạng thái đã giải mã token hay chưa
   const [decodedPayload, setDecodedPayload] = useState(null);
