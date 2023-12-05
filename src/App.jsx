@@ -32,6 +32,7 @@ const App = () => {
 
   // Hàm để giải mã token và thiết lập decodedPayload
   const getDecodedPayload = () => {
+    console.log("««««« token »»»»»", token);
     if (token && !hasDecodedToken) {
       // Giải mã token chỉ khi token tồn tại và chưa giải mã
       // Thiết lập token cho axiosClient để gửi trong mọi yêu cầu
@@ -57,7 +58,6 @@ const App = () => {
 
     fetchData();
   }, [token]);
-  console.log("««««« token »»»»»", token);
 
   return (
     <>
