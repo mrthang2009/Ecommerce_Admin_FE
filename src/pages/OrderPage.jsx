@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Table,
   Button,
@@ -31,6 +31,7 @@ const { Panel } = Collapse;
 const { Option } = Select;
 const DEFAULT_LIMIT = 8;
 const OrderPage = () => {
+  const navigate = useNavigate();
   //Trạng thái loading của button
   const [loadings, setLoadings] = useState([false]);
 
@@ -70,6 +71,7 @@ const OrderPage = () => {
       setLoadings([false]);
     }
   };
+
   const getOrder = useCallback(async (pagination) => {
     try {
       const res = await axiosClient.get(
@@ -86,7 +88,15 @@ const OrderPage = () => {
   }, []);
   useEffect(() => {
     getOrder(pagination);
-  }, [pagination.page, pagination.pageSize]);
+    // Cập nhật URL với tham số trang và kích thước trang
+    // Kiểm tra nếu pagination.page khác 1 thì mới cập nhật URL
+    if (pagination.page === 1) {
+      navigate(`/orders`);
+    } else {
+      navigate(`/orders?page=${pagination.page}`);
+    }
+  }, [navigate, pagination.page, pagination.pageSize]);
+
   const onChangePage = useCallback((page, pageSize) => {
     setPagination((prev) => ({
       ...prev,
@@ -264,6 +274,7 @@ const OrderPage = () => {
     setNoFilterResult(false);
     getOrder();
   };
+
   return (
     <main className="container">
       <Card span={24}>

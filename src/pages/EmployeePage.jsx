@@ -1,5 +1,6 @@
 import axiosClient from "../libraries/axiosClient";
 import { useEffect, useState, useCallback } from "react";
+import {useNavigate } from "react-router-dom";
 import {
   Card,
   Divider,
@@ -29,6 +30,7 @@ import styles from "./stylesPage/EmployeePage.module.scss";
 import EmployeeForm from "../components/EmployeeForm/EmployeeForm";
 const DEFAULT_LIMIT = 8;
 const EmployeePage = () => {
+  const navigate = useNavigate();
   //Trạng thái loading của button
   const [loadings, setLoadings] = useState([false]);
   const [loading, setLoading] = useState(false);
@@ -89,7 +91,12 @@ const EmployeePage = () => {
   // Gọi hàm getEmployees khi component được render hoặc khi có thay đổi
   useEffect(() => {
     getEmployees(pagination);
-  }, [pagination.page, pagination.pageSize]);
+    if (pagination.page === 1) {
+      navigate(`/employees`);
+    } else {
+      navigate(`/employees?page=${pagination.page}`);
+    }
+  }, [navigate, pagination.page, pagination.pageSize]);
   // Hàm để hiển thị modal cập nhật nhân viên và điền thông tin nhân viên vào form
   const showUpdateRoleModal = (employee) => {
     setEmployeeToUpdate(employee);

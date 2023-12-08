@@ -15,7 +15,7 @@ import {
   Popconfirm,
   message,
 } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { WarningOutlined, CheckOutlined } from "@ant-design/icons";
 import axiosClient from "../libraries/axiosClient";
@@ -28,10 +28,11 @@ const { Panel } = Collapse;
 const { Option } = Select;
 numeral.locale("vi");
 
-const DEFAULT_LIMIT = 8;
+const DEFAULT_LIMIT = 10;
 
 const PendingOrderPage = ({ role }) => {
   //Trạng thái loading của button
+  const navigate = useNavigate();
   const [loadings, setLoadings] = useState([false]);
 
   const [id, setId] = useState("");
@@ -71,7 +72,7 @@ const PendingOrderPage = ({ role }) => {
     }
   };
 
-  const getOrder = useCallback(async () => {
+  const getOrder = useCallback(async (pagination, role) => {
     try {
       let status = "";
       if (role === "SALES") {
@@ -90,11 +91,16 @@ const PendingOrderPage = ({ role }) => {
     } catch (error) {
       console.log(error);
     }
-  }, [pagination.page, pagination.pageSize, role]);
-
+  }, []);
   useEffect(() => {
-    getOrder();
-  }, [getOrder]);
+    getOrder(pagination, role);
+    if (pagination.page === 1) {
+      navigate(`/pending-orders`);
+    } else {
+      navigate(`/pending-orders?page=${pagination.page}`);
+    }
+  }, [navigate, pagination.page, pagination.pageSize]);
+
 
   const onChangePage = useCallback(
     (page, pageSize) => {

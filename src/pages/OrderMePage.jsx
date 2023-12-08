@@ -16,7 +16,7 @@ import {
   Popconfirm,
   message,
 } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import {
   WarningOutlined,
@@ -33,8 +33,9 @@ import styles from "./stylesPage/OrderMePage.module.scss";
 
 const { Panel } = Collapse;
 const { Option } = Select;
-const DEFAULT_LIMIT = 8;
+const DEFAULT_LIMIT = 10;
 const OrderMePage = ({ role }) => {
+  const navigate = useNavigate();
   //Trạng thái loading của button
   const [loadings, setLoadings] = useState([false]);
 
@@ -77,7 +78,7 @@ const OrderMePage = ({ role }) => {
       setLoadings([false]);
     }
   };
-  const getOrder = useCallback(async () => {
+  const getOrder = useCallback(async (pagination) => {
     try {
       const res = await axiosClient.get(
         `/orders/me?page=${pagination.page}&pageSize=${pagination.pageSize}`
@@ -90,11 +91,16 @@ const OrderMePage = ({ role }) => {
     } catch (error) {
       console.log(error);
     }
-  }, [pagination.page, pagination.pageSize]);
-
+  }, []);
   useEffect(() => {
-    getOrder();
-  }, [getOrder]);
+    getOrder(pagination);
+    if (pagination.page === 1) {
+      navigate(`/orders-me`);
+    } else {
+      navigate(`/orders-me?page=${pagination.page}`);
+    }
+  }, [navigate, pagination.page, pagination.pageSize]);
+
 
   const onChangePage = useCallback(
     (page, pageSize) => {

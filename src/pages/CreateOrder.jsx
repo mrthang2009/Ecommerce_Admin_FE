@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Pagination,
   Button,
@@ -35,6 +36,7 @@ numeral.locale("vi");
 const DEFAULT_LIMIT = 9;
 
 const ProductPage = () => {
+  const navigate = useNavigate();
   //Trạng thái loading của button
   const [loadings, setLoadings] = useState([false]);
 
@@ -73,7 +75,7 @@ const ProductPage = () => {
     }
   };
 
-  const getProducts = useCallback(async () => {
+  const getProducts = useCallback(async (pagination) => {
     try {
       const res = await axiosClient.get(
         `/products?page=${pagination.page}&pageSize=${pagination.pageSize}`
@@ -86,11 +88,16 @@ const ProductPage = () => {
     } catch (error) {
       console.log(error);
     }
-  }, [pagination.page, pagination.pageSize]);
+  }, []);
 
   useEffect(() => {
-    getProducts();
-  }, [pagination.page, pagination.pageSize, getProducts]);
+    getProducts(pagination);
+    if (pagination.page === 1) {
+      navigate(`/create-order`);
+    } else {
+      navigate(`/create-order?page=${pagination.page}`);
+    }
+  }, [navigate, pagination.page, pagination.pageSize]);
 
   const getCategories = useCallback(async () => {
     try {

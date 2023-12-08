@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Dropdown,
   Table,
@@ -33,9 +34,10 @@ const { Option } = Select;
 import numeral from "numeral";
 import "numeral/locales/vi";
 numeral.locale("vi");
-const DEFAULT_LIMIT = 8;
+const DEFAULT_LIMIT = 10;
 
 const ProductPage = () => {
+  const navigate = useNavigate();
   //Trạng thái loading của button
   const [loadings, setLoadings] = useState([false]);
 
@@ -103,7 +105,12 @@ const ProductPage = () => {
 
   useEffect(() => {
     getProducts(pagination);
-  }, [pagination.page, pagination.pageSize]);
+    if (pagination.page === 1) {
+      navigate(`/products`);
+    } else {
+      navigate(`/products?page=${pagination.page}`);
+    }
+  }, [navigate, pagination.page, pagination.pageSize]);
   useEffect(() => {
     getCategories();
   }, [getCategories]);
@@ -121,10 +128,9 @@ const ProductPage = () => {
       if (productToUpdate) {
         setLoadings([true]);
         await axiosClient.patch(`/products/${productToUpdate._id}`, values);
-        if (filterResult.length > 0) {
-          filterProducts();
-        }
-        if (products) {
+        if (filterResult && filterResult.length > 0) {
+          await filterProducts();
+        } else if (products.length > 0) {
           await getProducts(pagination);
         }
         setUpdateProductModalVisible(false);
@@ -142,9 +148,10 @@ const ProductPage = () => {
     try {
       await axiosClient.patch(`/products/delete/${record._id}`);
       if (filterResult.length > 0) {
-        filterProducts();
+        await filterProducts();
+      } else {
+        await getProducts(pagination);
       }
-      await getProducts(pagination);
       message.success("Xóa sản phẩm thành công");
     } catch (error) {
       console.error("Lỗi khi xóa sản phẩm: ", error);

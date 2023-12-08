@@ -1,5 +1,6 @@
 import axiosClient from "../libraries/axiosClient";
 import { useEffect, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Pagination,
   Table,
@@ -30,6 +31,7 @@ import styles from "./stylesPage/CategoryPage.module.scss";
 const DEFAULT_LIMIT = 10;
 
 const CategoryPage = () => {
+  const navigate = useNavigate();
   //Trạng thái loading của button
   const [loadings, setLoadings] = useState([false]);
   const [loading, setLoading] = useState(false);
@@ -83,7 +85,12 @@ const CategoryPage = () => {
 
   useEffect(() => {
     getCategories(pagination);
-  }, [pagination.page, pagination.pageSize]);
+    if (pagination.page === 1) {
+      navigate(`/categories`);
+    } else {
+      navigate(`/categories?page=${pagination.page}`);
+    }
+  }, [navigate, pagination.page, pagination.pageSize]);
 
   const showUpdateModal = (category) => {
     setCategoryToUpdate(category);

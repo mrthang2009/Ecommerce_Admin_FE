@@ -1,5 +1,6 @@
 import axiosClient from "../libraries/axiosClient";
 import { useEffect, useState, useCallback } from "react";
+import {useNavigate } from "react-router-dom";
 import {
   Divider,
   Card,
@@ -26,8 +27,8 @@ import styles from "./stylesPage/CustomerPage.module.scss";
 import numeral from "numeral";
 import "numeral/locales/vi";
 numeral.locale("vi");
-const DEFAULT_LIMIT = 8;
 const CustomerPage = () => {
+  const navigate = useNavigate();
   //Trạng thái loading của button
   // const [loadings, setLoadings] = useState([false]);
   const [loading, setLoading] = useState(false);
@@ -35,7 +36,7 @@ const CustomerPage = () => {
   const [pagination, setPagination] = useState({
     total: 1,
     page: 1,
-    pageSize: DEFAULT_LIMIT,
+    pageSize: 10,
   });
   // Get data khách hàng
   const [customers, setCustomers] = useState([]);
@@ -80,7 +81,12 @@ const CustomerPage = () => {
   // Gọi hàm getCustomers khi component được render hoặc khi có thay đổi
   useEffect(() => {
       getCustomers(pagination);
-  }, [pagination.page, pagination.pageSize]);
+      if (pagination.page === 1) {
+        navigate(`/customers`);
+      } else {
+        navigate(`/customers?page=${pagination.page}`);
+      }
+  }, [navigate, pagination.page, pagination.pageSize]);
   // Hàm để xử lý khi tạo khách hàng mới
   // const handleCreate = async (values) => {
   //   try {
@@ -314,7 +320,7 @@ const CustomerPage = () => {
                 <Pagination
                   defaultCurrent={1}
                   total={pagination.total}
-                  pageSize={DEFAULT_LIMIT}
+                  pageSize={10}
                   current={pagination.page}
                   onChange={onChangePage}
                 />
