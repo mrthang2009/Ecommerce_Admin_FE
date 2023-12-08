@@ -44,7 +44,12 @@
 
 /* CSS cho trạng thái mobile */
 @media only screen and (max-width: 430px) {
-    .avatar {
-        display: none;
+    // .avatar {
+    //     display: none;
+    // }
+    .name_customer {
+        .customAvatar {
+            display: none;
+        }
     }
 }
