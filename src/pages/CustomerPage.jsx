@@ -63,7 +63,7 @@ const CustomerPage = () => {
 
   // const [addCustomerModalVisible, setAddCustomerModalVisible] = useState(false);
   // Hàm để lấy danh sách khách hàng từ API
-  const getCustomers = useCallback(async () => {
+  const getCustomers = useCallback(async (pagination) => {
     try {
       const res = await axiosClient.get(
         `/customers?page=${pagination.page}&pageSize=${pagination.pageSize}`
@@ -76,11 +76,11 @@ const CustomerPage = () => {
     } catch (error) {
       console.log(error);
     }
-  }, [pagination.page, pagination.pageSize]);
+  }, []);
   // Gọi hàm getCustomers khi component được render hoặc khi có thay đổi
   useEffect(() => {
-    getCustomers();
-  }, [getCustomers]);
+      getCustomers(pagination);
+  }, [pagination.page, pagination.pageSize]);
   // Hàm để xử lý khi tạo khách hàng mới
   // const handleCreate = async (values) => {
   //   try {
@@ -235,18 +235,13 @@ const CustomerPage = () => {
     },
   ];
   // Hàm để thay đổi trang và số lượng sản phẩm trên trang
-  const onChangePage = useCallback(
-    (page, pageSize) => {
-      setPagination((prev) => ({
-        ...prev,
-        page,
-        pageSize,
-      }));
-
-      getCustomers();
-    },
-    [getCustomers]
-  );
+  const onChangePage = useCallback((page, pageSize) => {
+    setPagination((prev) => ({
+      ...prev,
+      page,
+      pageSize,
+    }));
+  }, []);
   const handleSearch = () => {
     searchCustomer(searchKeyword);
   };

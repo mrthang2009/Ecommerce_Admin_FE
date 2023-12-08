@@ -67,7 +67,7 @@ const SupplierPage = () => {
 
   useEffect(() => {
     getSuppliers();
-  }, [getSuppliers]);
+  }, []);
 
   const showUpdateModal = (supplier) => {
     setSupplierToUpdate(supplier);
@@ -83,7 +83,7 @@ const SupplierPage = () => {
         if (searchResult.length > 0) {
           searchSuppliers();
         }
-        getSuppliers();
+        await getSuppliers();
         setUpdateSupplierModalVisible(false);
         message.success("Cập nhật nhà cung cấp thành công");
         setLoadings([false]);
@@ -100,7 +100,7 @@ const SupplierPage = () => {
       if (searchResult.length > 0) {
         searchSuppliers();
       }
-      getSuppliers();
+      await getSuppliers();
       message.success("Xóa nhà cung cấp thành công");
     } catch (error) {
       message.error("Xóa nhà cung cấp không thành công");
@@ -115,7 +115,7 @@ const SupplierPage = () => {
       if (searchResult.length > 0) {
         searchSuppliers();
       }
-      getSuppliers();
+      await getSuppliers();
       setAddSupplierModalVisible(false);
       setLoadings([false]);
 

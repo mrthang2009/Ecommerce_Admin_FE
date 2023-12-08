@@ -27,7 +27,7 @@ import {
 import CategoryForm from "../components/CategoryForm/CategoryForm";
 import styles from "./stylesPage/CategoryPage.module.scss";
 
-const DEFAULT_LIMIT = 8;
+const DEFAULT_LIMIT = 6;
 
 const CategoryPage = () => {
   //Trạng thái loading của button
@@ -66,7 +66,7 @@ const CategoryPage = () => {
     }
   };
 
-  const getCategories = useCallback(async () => {
+  const getCategories = useCallback(async (pagination) => {
     try {
       const res = await axiosClient.get(
         `/categories?page=${pagination.page}&pageSize=${pagination.pageSize}`
@@ -79,11 +79,11 @@ const CategoryPage = () => {
     } catch (error) {
       console.log(error);
     }
-  }, [pagination.page, pagination.pageSize]);
+  }, []);
 
   useEffect(() => {
-    getCategories();
-  }, [getCategories]);
+    getCategories(pagination);
+  }, [pagination.page, pagination.pageSize]);
 
   const showUpdateModal = (category) => {
     setCategoryToUpdate(category);
@@ -99,7 +99,7 @@ const CategoryPage = () => {
         if (searchResult.length > 0) {
           searchCategories();
         }
-        getCategories();
+        await getCategories(pagination);
         setUpdateCategoryModalVisible(false);
         message.success("Cập nhật danh mục thành công");
         setLoadings([false]);
@@ -117,7 +117,7 @@ const CategoryPage = () => {
       if (searchResult.length > 0) {
         searchCategories();
       }
-      getCategories();
+      await getCategories(pagination);
       message.success("Xóa danh mục thành công");
     } catch (error) {
       message.error("Xóa danh mục thất bại");
@@ -132,7 +132,7 @@ const CategoryPage = () => {
       if (searchResult.length > 0) {
         searchCategories();
       }
-      getCategories();
+      await getCategories(pagination);
       setAddCategoryModalVisible(false);
       message.success("Tạo danh mục mới thành công");
       setLoadings([false]);
@@ -143,13 +143,13 @@ const CategoryPage = () => {
     }
   };
 
-  const onChangePage = useCallback(
-    (page, pageSize) => {
-      setPagination((prev) => ({ ...prev, page, pageSize }));
-      getCategories();
-    },
-    [getCategories]
-  );
+  const onChangePage = useCallback((page, pageSize) => {
+    setPagination((prev) => ({
+      ...prev,
+      page,
+      pageSize,
+    }));
+  }, []);
 
   const handleSearch = () => {
     searchCategories(searchKeyword);

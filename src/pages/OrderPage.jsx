@@ -70,7 +70,7 @@ const OrderPage = () => {
       setLoadings([false]);
     }
   };
-  const getOrder = useCallback(async () => {
+  const getOrder = useCallback(async (pagination) => {
     try {
       const res = await axiosClient.get(
         `/orders?page=${pagination.page}&pageSize=${pagination.pageSize}`
@@ -83,22 +83,17 @@ const OrderPage = () => {
     } catch (error) {
       console.log(error);
     }
-  }, [pagination.page, pagination.pageSize]);
-
+  }, []);
   useEffect(() => {
-    getOrder();
-  }, [getOrder]);
-  const onChangePage = useCallback(
-    (page, pageSize) => {
-      setPagination((prev) => ({
-        ...prev,
-        page,
-        pageSize,
-      }));
-      getOrder();
-    },
-    [getOrder]
-  );
+    getOrder(pagination);
+  }, [pagination.page, pagination.pageSize]);
+  const onChangePage = useCallback((page, pageSize) => {
+    setPagination((prev) => ({
+      ...prev,
+      page,
+      pageSize,
+    }));
+  }, []);
   const handleFilter = () => {
     filterOrder(id, status, typeOrder, paymentType, startDate, endDate);
   };

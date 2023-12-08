@@ -39,10 +39,10 @@ const AccountPage = () => {
     getMe();
   }, [getMe]);
 
-  const [meToUpdate, setMeToUpdate] = useState(null);
+  // const [meToUpdate, setMeToUpdate] = useState(null);
   const [updateMeModalVisible, setUpdateMeModalVisible] = useState(false);
   const showUpdateModal = (detailMe) => {
-    setMeToUpdate(detailMe);
+    // setMeToUpdate(detailMe);
     setUpdateMeModalVisible(true);
     const formattedBirthday = detailMe.birthday
       ? moment(detailMe.birthday).format("YYYY-MM-DD")
@@ -55,10 +55,10 @@ const AccountPage = () => {
   const [updateAvatarModalVisible, setupdateAvatarModalVisible] =
     useState(false);
 
-  const showUpdateAvatarModal = (detailMe) => {
-    setMeToUpdate(detailMe);
-    setupdateAvatarModalVisible(true);
-  };
+  // const showUpdateAvatarModal = (detailMe) => {
+  //   setMeToUpdate(detailMe);
+  //   setupdateAvatarModalVisible(true);
+  // };
 
   // Hàm xử lý khi cập nhật nhân viên
   const handleupdateMe = async (values) => {
@@ -76,26 +76,26 @@ const AccountPage = () => {
     }
   };
 
-  const handleUploadAvatar = async (file) => {
-    try {
-      if (meToUpdate) {
-        const formData = new FormData();
-        formData.append("avatar", file);
+  // const handleUploadAvatar = async (file) => {
+  //   try {
+  //     if (meToUpdate) {
+  //       const formData = new FormData();
+  //       formData.append("avatar", file);
 
-        await fetch(`http://localhost:9000/medias/upload-avatar-me`, {
-          method: "POST",
-          body: formData,
-        });
+  //       await fetch(`http://localhost:9000/medias/upload-avatar-me`, {
+  //         method: "POST",
+  //         body: formData,
+  //       });
 
-        getMe();
-        setUpdateMeModalVisible(false);
-        message.success("Cập nhật ảnh đại diện thành công");
-      }
-    } catch (error) {
-      message.error("Cập nhật ảnh đại diện thất bại");
-      console.error("Lỗi khi cập nhật nhân viên: ", error);
-    }
-  };
+  //       getMe();
+  //       setUpdateMeModalVisible(false);
+  //       message.success("Cập nhật ảnh đại diện thành công");
+  //     }
+  //   } catch (error) {
+  //     message.error("Cập nhật ảnh đại diện thất bại");
+  //     console.error("Lỗi khi cập nhật nhân viên: ", error);
+  //   }
+  // };
   const getInitials = (firstName, lastName) => {
     const initials =
       (firstName ? firstName.charAt(0) : "") +
@@ -223,7 +223,6 @@ const AccountPage = () => {
         footer={null}
       >
         <AvatarUpload
-          onUpload={handleUploadAvatar}
           handleCancel={() => setupdateAvatarModalVisible(false)}
         />
       </Modal>

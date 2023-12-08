@@ -77,7 +77,7 @@ const ProductPage = () => {
     }
   };
 
-  const getProducts = useCallback(async () => {
+  const getProducts = useCallback(async (pagination) => {
     try {
       const res = await axiosClient.get(
         `/products?page=${pagination.page}&pageSize=${pagination.pageSize}`
@@ -90,11 +90,7 @@ const ProductPage = () => {
     } catch (error) {
       console.log(error);
     }
-  }, [pagination.page, pagination.pageSize]);
-
-  useEffect(() => {
-    getProducts();
-  }, [getProducts]);
+  }, []);
 
   const getCategories = useCallback(async () => {
     try {
@@ -105,6 +101,9 @@ const ProductPage = () => {
     }
   }, []);
 
+  useEffect(() => {
+    getProducts(pagination);
+  }, [pagination.page, pagination.pageSize]);
   useEffect(() => {
     getCategories();
   }, [getCategories]);
@@ -126,7 +125,7 @@ const ProductPage = () => {
           filterProducts();
         }
         if (products) {
-          getProducts();
+          await getProducts(pagination);
         }
         setUpdateProductModalVisible(false);
         message.success("Cập nhật sản phẩm thành công");
@@ -145,7 +144,7 @@ const ProductPage = () => {
       if (filterResult.length > 0) {
         filterProducts();
       }
-      getProducts();
+      await getProducts(pagination);
       message.success("Xóa sản phẩm thành công");
     } catch (error) {
       console.error("Lỗi khi xóa sản phẩm: ", error);
@@ -159,7 +158,7 @@ const ProductPage = () => {
       if (filterResult.length > 0) {
         filterProducts();
       }
-      getProducts();
+      await getProducts(pagination);
       setAddProductModalVisible(false);
       message.success("Tạo sản phẩm mới thành công");
       setLoadings([false]);

@@ -72,7 +72,7 @@ const EmployeePage = () => {
   // Đây là biến tham chiếu đến form cập nhật nhân viên
   const [updateForm] = Form.useForm();
   // Hàm lấy danh sách nhân viên từ API
-  const getEmployees = useCallback(async () => {
+  const getEmployees = useCallback(async (pagination) => {
     try {
       const res = await axiosClient.get(
         `/employees?page=${pagination.page}&pageSize=${pagination.pageSize}`
@@ -85,11 +85,11 @@ const EmployeePage = () => {
     } catch (error) {
       console.log(error);
     }
-  }, [pagination.page, pagination.pageSize]);
+  }, []);
   // Gọi hàm getEmployees khi component được render hoặc khi có thay đổi
   useEffect(() => {
-    getEmployees();
-  }, [getEmployees]);
+    getEmployees(pagination);
+  }, [pagination.page, pagination.pageSize]);
   // Hàm để hiển thị modal cập nhật nhân viên và điền thông tin nhân viên vào form
   const showUpdateRoleModal = (employee) => {
     setEmployeeToUpdate(employee);
@@ -111,7 +111,7 @@ const EmployeePage = () => {
         if (searchResult.length > 0) {
           searchEmployee();
         }
-        getEmployees();
+        await getEmployees(pagination);
         setUpdateEmployeeModalVisible(false);
         message.success("Cập nhật nhân viên thành công");
         setLoadings([false]);
@@ -129,7 +129,7 @@ const EmployeePage = () => {
       if (searchResult.length > 0) {
         searchEmployee();
       }
-      getEmployees();
+      await getEmployees(pagination);
       message.success("Xóa nhân viên thành công");
     } catch (error) {
       message.error("Xóa nhân viên không thành công");
@@ -144,7 +144,7 @@ const EmployeePage = () => {
       if (searchResult.length > 0) {
         searchEmployee();
       }
-      getEmployees();
+      await getEmployees(pagination);
       setAddEmployeeModalVisible(false);
       message.success("Tạo nhân viên mới thành công");
       setLoadings([false]);
@@ -269,18 +269,13 @@ const EmployeePage = () => {
     },
   ];
   // Hàm để thay đổi trang và số lượng sản phẩm trên trang
-  const onChangePage = useCallback(
-    (page, pageSize) => {
-      setPagination((prev) => ({
-        ...prev,
-        page,
-        pageSize,
-      }));
-
-      getEmployees();
-    },
-    [getEmployees]
-  );
+  const onChangePage = useCallback((page, pageSize) => {
+    setPagination((prev) => ({
+      ...prev,
+      page,
+      pageSize,
+    }));
+  }, []);
 
   const handleSearch = () => {
     searchEmployee(searchKeyword);
