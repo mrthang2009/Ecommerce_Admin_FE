@@ -29,7 +29,7 @@ moment.locale("vi");
 import styles from "./stylesPage/OrderPage.module.scss";
 const { Panel } = Collapse;
 const { Option } = Select;
-const DEFAULT_LIMIT = 8;
+const DEFAULT_LIMIT = 10;
 const OrderPage = () => {
   const navigate = useNavigate();
   //Trạng thái loading của button
