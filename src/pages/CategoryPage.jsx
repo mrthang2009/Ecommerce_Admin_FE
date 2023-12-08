@@ -27,7 +27,7 @@ import {
 import CategoryForm from "../components/CategoryForm/CategoryForm";
 import styles from "./stylesPage/CategoryPage.module.scss";
 
-const DEFAULT_LIMIT = 6;
+const DEFAULT_LIMIT = 8;
 
 const CategoryPage = () => {
   //Trạng thái loading của button
