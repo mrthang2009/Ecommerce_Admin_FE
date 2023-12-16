@@ -55,11 +55,6 @@ const AccountPage = () => {
   const [updateAvatarModalVisible, setupdateAvatarModalVisible] =
     useState(false);
 
-  // const showUpdateAvatarModal = (detailMe) => {
-  //   setMeToUpdate(detailMe);
-  //   setupdateAvatarModalVisible(true);
-  // };
-
   // Hàm xử lý khi cập nhật nhân viên
   const handleupdateMe = async (values) => {
     try {
@@ -76,26 +71,27 @@ const AccountPage = () => {
     }
   };
 
-  // const handleUploadAvatar = async (file) => {
-  //   try {
-  //     if (meToUpdate) {
-  //       const formData = new FormData();
-  //       formData.append("avatar", file);
+  const handleUploadAvatar = async (file) => {
+    try {
+      setLoadings([true]);
+      const formData = new FormData();
+      formData.append("avatar", file);
 
-  //       await fetch(`http://localhost:9000/medias/upload-avatar-me`, {
-  //         method: "POST",
-  //         body: formData,
-  //       });
+      await fetch(`http://localhost:9000/medias/upload-avatar-me`, {
+        method: "POST",
+        body: formData,
+      });
 
-  //       getMe();
-  //       setUpdateMeModalVisible(false);
-  //       message.success("Cập nhật ảnh đại diện thành công");
-  //     }
-  //   } catch (error) {
-  //     message.error("Cập nhật ảnh đại diện thất bại");
-  //     console.error("Lỗi khi cập nhật nhân viên: ", error);
-  //   }
-  // };
+      getMe();
+      setupdateAvatarModalVisible(false);
+      message.success("Cập nhật ảnh đại diện thành công");
+      setLoadings([false]);
+    } catch (error) {
+      message.error("Cập nhật ảnh đại diện thất bại");
+      console.error("Lỗi khi cập nhật nhân viên: ", error);
+      setLoadings([false]);
+    }
+  };
   const getInitials = (firstName, lastName) => {
     const initials =
       (firstName ? firstName.charAt(0) : "") +
@@ -123,7 +119,7 @@ const AccountPage = () => {
                     {
                       key: "2",
                       label: "Cập nhật ảnh đại diện",
-                      onClick: () => showUpdateAvatarModal(detailMe),
+                      onClick: () => setupdateAvatarModalVisible(true),
                     },
                   ],
                 }}
@@ -224,6 +220,7 @@ const AccountPage = () => {
       >
         <AvatarUpload
           handleCancel={() => setupdateAvatarModalVisible(false)}
+          uploadAvatar={handleUploadAvatar}
         />
       </Modal>
     </main>
