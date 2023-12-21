@@ -1,5 +1,5 @@
 import { Form, Input, Button, message, Checkbox } from "antd";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axiosClient from "../libraries/axiosClient";
 import { useEffect } from "react";
 import styles from "./stylesPage/LoginPage.module.scss";
@@ -17,8 +17,6 @@ const LoginForm = () => {
   useEffect(() => {
     if (token) {
       navigate("/");
-    } else {
-      navigate("/login");
     }
   }, [navigate, token]);
 
@@ -63,6 +61,7 @@ const LoginForm = () => {
       </Helmet>
       <div className="login-container">
         <Form
+        layout="vertical"
           form={form}
           name="basic"
           wrapperCol={{
@@ -75,6 +74,7 @@ const LoginForm = () => {
           onFinishFailed={onFinishFailed}
         >
           <Form.Item
+          label="Email"
             name="email"
             style={{ marginBottom: "15px" }}
             autoComplete="off" // Tắt gợi ý nhập tự động
@@ -93,6 +93,7 @@ const LoginForm = () => {
           </Form.Item>
 
           <Form.Item
+          label="Mật khẩu"
             name="password"
             style={{ marginBottom: "15px" }}
             autoComplete="off" // Tắt gợi ý nhập tự động
@@ -105,6 +106,8 @@ const LoginForm = () => {
           >
             <Input.Password placeholder="Nhập mật khẩu của bạn" />
           </Form.Item>
+          <Link to="/forgot-password">Quên mật khẩu?</Link>
+
           <Form.Item name="remember" valuePropName="checked">
             <Checkbox onChange={(e) => setIsRememberMe(e.target.checked)}>
               Ghi nhớ đăng nhập
@@ -139,7 +142,6 @@ const LoginPage = () => {
           alt=""
         />
         <LoginForm />
-        {/* <a href="">Quên mật khẩu?</a> */}
       </div>
     </main>
   );

@@ -19,6 +19,7 @@ import OrderMePage from "./pages/OrderMePage";
 import ChangePassword from "./pages/ChangePassword";
 import StatisticalPage from "./pages/StatisticalPage";
 import PendingOrderPage from "./pages/PendingOrderPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 const App = () => {
   // Sử dụng useNavigate để điều hướng trang
   const navigate = useNavigate();
@@ -33,19 +34,17 @@ const App = () => {
   // Hàm để giải mã token và thiết lập decodedPayload
 
   const getDecodedPayload = async () => {
-    if (!token) {
-      navigate("/login");
-      return;
-    }
     if (token && !hasDecodedToken) {
       const decodedToken = decodeToken(token);
-  
+
       if (decodedToken) {
         setDecodedPayloadToken(decodedToken);
         setHasDecodedToken(true);
       }
-      if (decodedToken.exp < Date.now() / 1000) { // Sử dụng decodedToken.exp thay vì decodedPayloadToken.exp
+      if (decodedToken.exp < Date.now() / 1000) {
+        // Sử dụng decodedToken.exp thay vì decodedPayloadToken.exp
         if (!refreshToken) {
+          localStorage.removeItem("TOKEN");
           navigate("/login");
           return;
         }
@@ -55,7 +54,7 @@ const App = () => {
             const res = await axiosClient.post(`auth/refesh-token`, {
               refreshToken,
             });
-  
+
             const newToken = res.data.token;
             localStorage.setItem("TOKEN", newToken);
             axiosClient.defaults.headers.Authorization = `Bearer ${newToken}`;
@@ -63,6 +62,8 @@ const App = () => {
             console.error("Error refreshing token:", error);
           }
         } else {
+          localStorage.removeItem("TOKEN");
+          localStorage.removeItem("REFRESH_TOKEN");
           navigate("/login");
         }
       } else {
@@ -70,22 +71,30 @@ const App = () => {
       }
     }
   };
-  
+
   // Sử dụng useEffect để gọi getDecodedPayload khi component được render
   useEffect(() => {
-    const fetchData = async () => {
-      await getDecodedPayload();
-      setHasDecodedToken(false);
-    };
+    const currentPath = window.location.pathname;
+    if (!token) {
+      if (currentPath === "/forgot-password") {
+        navigate("/forgot-password");
+      } else {
+        navigate("/login");
+      }
+    } else {
+      const fetchData = async () => {
+        await getDecodedPayload();
+        setHasDecodedToken(false);
+      };
 
-    fetchData();
-  }, [token]);
+      fetchData();
+    }
+  }, [token, navigate]);
+
   return (
     <>
       <Routes>
         {token && decodedPayloadToken ? (
-          console.log('««««« token »»»»»', token),
-          console.log('««««« decodedPayloadToken »»»»»', decodedPayloadToken),
           <Route
             path="/"
             element={
@@ -173,7 +182,10 @@ const App = () => {
               )}
           </Route>
         ) : (
-          <Route path="/login" element={<LoginPage />} />
+          <>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          </>
         )}
       </Routes>
     </>

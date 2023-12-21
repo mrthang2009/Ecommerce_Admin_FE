@@ -53,19 +53,12 @@ const ChangePassword = () => {
           <Form.Item
             label="Mật khẩu mới:"
             name="newPassword"
+            autoComplete="off" // Tắt gợi ý nhập tự động
             rules={[
               {
                 required: true,
                 message: "Vui lòng nhập mật khẩu mới",
               },
-              ({ getFieldValue }) => ({
-                validator(_, value) {
-                  if (!value || getFieldValue("passwordOld") !== value) {
-                    return Promise.resolve();
-                  }
-                  return Promise.reject("Mật khẩu mới phải khác mật khẩu cũ");
-                },
-              }),
             ]}
           >
             <Input.Password />
@@ -75,6 +68,7 @@ const ChangePassword = () => {
             label="Xác nhận mật khẩu mới:"
             name="confirmPassword"
             dependencies={["newPassword"]}
+            autoComplete="off" // Tắt gợi ý nhập tự động
             rules={[
               {
                 required: true,
