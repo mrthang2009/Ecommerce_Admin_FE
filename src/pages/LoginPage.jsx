@@ -1,4 +1,4 @@
-import { Form, Input, Button, message } from "antd";
+import { Form, Input, Button, message, Checkbox } from "antd";
 import { useNavigate } from "react-router-dom";
 import axiosClient from "../libraries/axiosClient";
 import { useEffect } from "react";
@@ -10,7 +10,7 @@ const LoginForm = () => {
   const [form] = Form.useForm();
   //Trạng thái loading của button
   const [loadings, setLoadings] = useState([false]);
-
+  const [isRememberMe, setIsRememberMe] = useState(false);
   const navigate = useNavigate();
   // Lấy biến token từ nơi bạn đã lưu trữ nó nếu có
   const token = localStorage.getItem("TOKEN");
@@ -32,7 +32,9 @@ const LoginForm = () => {
 
       // Lưu token vào Local Storage
       localStorage.setItem("TOKEN", token);
-      localStorage.setItem("REFRESH_TOKEN", refreshToken);
+      if (isRememberMe) {
+        localStorage.setItem("REFRESH_TOKEN", refreshToken);
+      }
 
       axiosClient.defaults.headers.Authorization = `Bearer ${token}`;
 
@@ -103,7 +105,11 @@ const LoginForm = () => {
           >
             <Input.Password placeholder="Nhập mật khẩu của bạn" />
           </Form.Item>
-
+          <Form.Item name="remember" valuePropName="checked">
+            <Checkbox onChange={(e) => setIsRememberMe(e.target.checked)}>
+              Ghi nhớ đăng nhập
+            </Checkbox>
+          </Form.Item>
           <Form.Item>
             <Button
               type="primary"

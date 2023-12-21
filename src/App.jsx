@@ -23,30 +23,54 @@ const App = () => {
   // Sử dụng useNavigate để điều hướng trang
   const navigate = useNavigate();
 
-  // Lấy token từ local storage
+  // Lấy token và refreshToken từ local storage
   const token = window.localStorage.getItem("TOKEN");
+  const refreshToken = localStorage.getItem("REFRESH_TOKEN");
 
   // Sử dụng state để lưu thông tin giải mã từ token và trạng thái đã giải mã token hay chưa
-  const [decodedPayload, setDecodedPayload] = useState(null);
   const [hasDecodedToken, setHasDecodedToken] = useState(false);
-
+  const [decodedPayloadToken, setDecodedPayloadToken] = useState(null);
   // Hàm để giải mã token và thiết lập decodedPayload
-  const getDecodedPayload = () => {
-    if (token && !hasDecodedToken) {
-      // Giải mã token chỉ khi token tồn tại và chưa giải mã
-      // Thiết lập token cho axiosClient để gửi trong mọi yêu cầu
-      axiosClient.defaults.headers.Authorization = `Bearer ${token}`;
-      const decodedPayload = decodeToken(token); // Sử dụng hàm decodeToken để giải mã token
-      if (decodedPayload) {
-        setDecodedPayload(decodedPayload);
-        setHasDecodedToken(true); // Đánh dấu rằng đã giải mã token
-      }
-    } else if (!token) {
-      // Nếu không có token, điều hướng đến trang đăng nhập
+
+  const getDecodedPayload = async () => {
+    if (!token) {
       navigate("/login");
+      return;
+    }
+    if (token && !hasDecodedToken) {
+      const decodedToken = decodeToken(token);
+  
+      if (decodedToken) {
+        setDecodedPayloadToken(decodedToken);
+        setHasDecodedToken(true);
+      }
+      if (decodedToken.exp < Date.now() / 1000) { // Sử dụng decodedToken.exp thay vì decodedPayloadToken.exp
+        if (!refreshToken) {
+          navigate("/login");
+          return;
+        }
+        const decodedPayloadRefreshToken = decodeToken(refreshToken);
+        if (decodedPayloadRefreshToken.exp >= Date.now() / 1000) {
+          try {
+            const res = await axiosClient.post(`auth/refesh-token`, {
+              refreshToken,
+            });
+  
+            const newToken = res.data.token;
+            localStorage.setItem("TOKEN", newToken);
+            axiosClient.defaults.headers.Authorization = `Bearer ${newToken}`;
+          } catch (error) {
+            console.error("Error refreshing token:", error);
+          }
+        } else {
+          navigate("/login");
+        }
+      } else {
+        axiosClient.defaults.headers.Authorization = `Bearer ${token}`;
+      }
     }
   };
-
+  
   // Sử dụng useEffect để gọi getDecodedPayload khi component được render
   useEffect(() => {
     const fetchData = async () => {
@@ -56,79 +80,97 @@ const App = () => {
 
     fetchData();
   }, [token]);
-
   return (
     <>
       <Routes>
-        {token && decodedPayload ? (
+        {token && decodedPayloadToken ? (
+          console.log('««««« token »»»»»', token),
+          console.log('««««« decodedPayloadToken »»»»»', decodedPayloadToken),
           <Route
             path="/"
             element={
               <Layout
-                userRole={decodedPayload.typeRole}
-                userAvatar={decodedPayload.avatar}
-                userLastName={decodedPayload.lastName}
-                userFirstName={decodedPayload.firstName}
+                userRole={decodedPayloadToken.typeRole}
+                userAvatar={decodedPayloadToken.avatar}
+                userLastName={decodedPayloadToken.lastName}
+                userFirstName={decodedPayloadToken.firstName}
               />
             }
           >
-            {decodedPayload && decodedPayload.typeRole === "MANAGE" && (
-              <>
-                <Route
-                  index
-                  element={<StatisticalPage role={decodedPayload.typeRole} />}
-                />
-                <Route path="/orders" element={<OrderPage />} />
-                <Route path="/orders/:id" element={<DetailOrderPage />} />
-                <Route path="/products" element={<ProductPage />} />
-                <Route path="/categories" element={<CategoryPage />} />
-                <Route path="/employees" element={<EmployeePage />} />
-                <Route path="/customers" element={<CustomerPage />} />
-                <Route path="/suppliers" element={<SupplierPage />} />
-                <Route path="/account" element={<AccountPage />} />
-                <Route path="/change-password" element={<ChangePassword />} />
-              </>
-            )}
-            {decodedPayload && decodedPayload.typeRole === "SALES" && (
-              <>
-                <Route
-                  index
-                  element={<StatisticalPage role={decodedPayload.typeRole} />}
-                />
-                <Route path="/create-order" element={<CreateOrder />} />
-                <Route
-                  path="/pending-orders"
-                  element={<PendingOrderPage role={decodedPayload.typeRole} />}
-                />
-                <Route
-                  path="/orders-me"
-                  element={<OrderMePage role={decodedPayload.typeRole} />}
-                />
-                <Route path="/orders/:id" element={<DetailOrderPage />} />
-                <Route path="/account" element={<AccountPage />} />
-                <Route path="/change-password" element={<ChangePassword />} />
-              </>
-            )}
-            {decodedPayload && decodedPayload.typeRole === "SHIPPER" && (
-              <>
-                <Route
-                  index
-                  element={<StatisticalPage role={decodedPayload.typeRole} />}
-                />
-                <Route path="/account" element={<AccountPage />} />
-                <Route
-                  path="/pending-orders"
-                  element={<PendingOrderPage role={decodedPayload.typeRole} />}
-                />
-                <Route path="/orders/:id" element={<DetailOrderPage />} />
-                <Route
-                  path="/orders-me"
-                  element={<OrderMePage role={decodedPayload.typeRole} />}
-                />
-                <Route path="/account" element={<AccountPage />} />
-                <Route path="/change-password" element={<ChangePassword />} />
-              </>
-            )}
+            {decodedPayloadToken &&
+              decodedPayloadToken.typeRole === "MANAGE" && (
+                <>
+                  <Route
+                    index
+                    element={
+                      <StatisticalPage role={decodedPayloadToken.typeRole} />
+                    }
+                  />
+                  <Route path="/orders" element={<OrderPage />} />
+                  <Route path="/orders/:id" element={<DetailOrderPage />} />
+                  <Route path="/products" element={<ProductPage />} />
+                  <Route path="/categories" element={<CategoryPage />} />
+                  <Route path="/employees" element={<EmployeePage />} />
+                  <Route path="/customers" element={<CustomerPage />} />
+                  <Route path="/suppliers" element={<SupplierPage />} />
+                  <Route path="/account" element={<AccountPage />} />
+                  <Route path="/change-password" element={<ChangePassword />} />
+                </>
+              )}
+            {decodedPayloadToken &&
+              decodedPayloadToken.typeRole === "SALES" && (
+                <>
+                  <Route
+                    index
+                    element={
+                      <StatisticalPage role={decodedPayloadToken.typeRole} />
+                    }
+                  />
+                  <Route path="/create-order" element={<CreateOrder />} />
+                  <Route
+                    path="/pending-orders"
+                    element={
+                      <PendingOrderPage role={decodedPayloadToken.typeRole} />
+                    }
+                  />
+                  <Route
+                    path="/orders-me"
+                    element={
+                      <OrderMePage role={decodedPayloadToken.typeRole} />
+                    }
+                  />
+                  <Route path="/orders/:id" element={<DetailOrderPage />} />
+                  <Route path="/account" element={<AccountPage />} />
+                  <Route path="/change-password" element={<ChangePassword />} />
+                </>
+              )}
+            {decodedPayloadToken &&
+              decodedPayloadToken.typeRole === "SHIPPER" && (
+                <>
+                  <Route
+                    index
+                    element={
+                      <StatisticalPage role={decodedPayloadToken.typeRole} />
+                    }
+                  />
+                  <Route path="/account" element={<AccountPage />} />
+                  <Route
+                    path="/pending-orders"
+                    element={
+                      <PendingOrderPage role={decodedPayloadToken.typeRole} />
+                    }
+                  />
+                  <Route path="/orders/:id" element={<DetailOrderPage />} />
+                  <Route
+                    path="/orders-me"
+                    element={
+                      <OrderMePage role={decodedPayloadToken.typeRole} />
+                    }
+                  />
+                  <Route path="/account" element={<AccountPage />} />
+                  <Route path="/change-password" element={<ChangePassword />} />
+                </>
+              )}
           </Route>
         ) : (
           <Route path="/login" element={<LoginPage />} />
