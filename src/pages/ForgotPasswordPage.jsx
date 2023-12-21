@@ -184,6 +184,10 @@ const ResetPasswordForm = () => {
                 required: true,
                 message: "Vui lòng nhập mật khẩu của bạn",
               },
+              {
+                pattern: /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/,
+                message: "Mật khẩu không hợp lệ! Phải có ít nhất 8 ký tự, bao gồm một chữ hoa và một ký tự đặc biệt.",
+              },
             ]}
           >
             <Input.Password placeholder="Nhập mật khẩu của bạn" />
@@ -235,9 +239,8 @@ const ResetPasswordForm = () => {
           footer={null}
           centered
         >
-          <p style={{marginBottom: "20px"}}>
-            Mã xác thực đã được gửi đến email{" "}
-            {hideEmail(formData.email)}. Vui
+          <p style={{ marginBottom: "20px" }}>
+            Mã xác thực đã được gửi đến email {hideEmail(formData.email)}. Vui
             lòng nhập mã xác thực email để hoàn thành đặt lại mật khẩu.
           </p>
 
@@ -276,7 +279,7 @@ const ResetPasswordForm = () => {
             >
               Gửi lại mã xác thực
             </Button>
-            <div style={{ textAlign: "center", marginTop: "15px" }}>
+            <Form.Item>
               <Button
                 type="primary"
                 style={{
@@ -289,7 +292,7 @@ const ResetPasswordForm = () => {
               >
                 Xác thực email
               </Button>
-            </div>
+            </Form.Item>
           </Form>
         </Modal>
       </div>
@@ -301,10 +304,12 @@ const ForgotPasswordPage = () => {
   return (
     <main className={styles.background}>
       <div className={styles.box_reset}>
-        <img
-          src="https://statics.vincom.com.vn/http/vincom-ho/thuong_hieu/anh_logo/Jollibee.png/6ec6dd2b7a0879c9eb1b77a204436a30.webp"
-          alt=""
-        />
+        <div className={styles.logo}>
+          <img
+            src="https://statics.vincom.com.vn/http/vincom-ho/thuong_hieu/anh_logo/Jollibee.png/6ec6dd2b7a0879c9eb1b77a204436a30.webp"
+            alt=""
+          />
+        </div>
         <ResetPasswordForm />
       </div>
     </main>

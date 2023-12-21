@@ -9,23 +9,29 @@
         background-color: #FFFFFF;
         max-width: 350px;
         border-radius: 35px;
-        text-align: center;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         padding: 30px;
 
-        img {
-            width: 60%;
-            height: auto !important;
-            margin: 10px auto !important;
+        .logo {
+            text-align: center;
+
+            img {
+                width: 60%;
+                height: auto !important;
+                margin: 10px auto !important;
+            }
         }
+
+
         a {
-            font-size: 90%;
+            text-align: left;
         }
 
     }
 }
+
 @media only screen and (max-width: 320px) {
     .box_login {
         width: 280px;

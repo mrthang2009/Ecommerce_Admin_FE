@@ -59,6 +59,10 @@ const ChangePassword = () => {
                 required: true,
                 message: "Vui lòng nhập mật khẩu mới",
               },
+              {
+                pattern: /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/,
+                message: "Mật khẩu không hợp lệ! Phải có ít nhất 8 ký tự, bao gồm một chữ hoa và một ký tự đặc biệt.",
+              },
             ]}
           >
             <Input.Password />

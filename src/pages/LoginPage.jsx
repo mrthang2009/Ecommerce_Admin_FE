@@ -1,5 +1,5 @@
 import { Form, Input, Button, message, Checkbox } from "antd";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axiosClient from "../libraries/axiosClient";
 import { useEffect } from "react";
 import styles from "./stylesPage/LoginPage.module.scss";
@@ -61,7 +61,7 @@ const LoginForm = () => {
       </Helmet>
       <div className="login-container">
         <Form
-        layout="vertical"
+          layout="vertical"
           form={form}
           name="basic"
           wrapperCol={{
@@ -74,7 +74,7 @@ const LoginForm = () => {
           onFinishFailed={onFinishFailed}
         >
           <Form.Item
-          label="Email"
+            label="Email"
             name="email"
             style={{ marginBottom: "15px" }}
             autoComplete="off" // Tắt gợi ý nhập tự động
@@ -93,7 +93,7 @@ const LoginForm = () => {
           </Form.Item>
 
           <Form.Item
-          label="Mật khẩu"
+            label="Mật khẩu"
             name="password"
             style={{ marginBottom: "15px" }}
             autoComplete="off" // Tắt gợi ý nhập tự động
@@ -106,14 +106,18 @@ const LoginForm = () => {
           >
             <Input.Password placeholder="Nhập mật khẩu của bạn" />
           </Form.Item>
-          <Link to="/forgot-password">Quên mật khẩu?</Link>
+          <a href="/forgot-password">Quên mật khẩu?</a>
 
-          <Form.Item name="remember" valuePropName="checked">
+          <Form.Item
+            name="remember"
+            style={{ marginBottom: "15px", textAlign: "center" }}
+            valuePropName="checked"
+          >
             <Checkbox onChange={(e) => setIsRememberMe(e.target.checked)}>
               Ghi nhớ đăng nhập
             </Checkbox>
           </Form.Item>
-          <Form.Item>
+          <Form.Item style={{ textAlign: "center" }}>
             <Button
               type="primary"
               htmlType="submit"
@@ -137,10 +141,12 @@ const LoginPage = () => {
   return (
     <main className={styles.background}>
       <div className={styles.box_login}>
-        <img
-          src="https://statics.vincom.com.vn/http/vincom-ho/thuong_hieu/anh_logo/Jollibee.png/6ec6dd2b7a0879c9eb1b77a204436a30.webp"
-          alt=""
-        />
+        <div className={styles.logo}>
+          <img
+            src="https://statics.vincom.com.vn/http/vincom-ho/thuong_hieu/anh_logo/Jollibee.png/6ec6dd2b7a0879c9eb1b77a204436a30.webp"
+            alt=""
+          />
+        </div>
         <LoginForm />
       </div>
     </main>
