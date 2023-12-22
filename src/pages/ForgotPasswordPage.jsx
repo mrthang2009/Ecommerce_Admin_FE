@@ -43,7 +43,6 @@ const ResetPasswordForm = () => {
         email: values.email,
         forgotPassword: true,
       });
-
       setShowVerificationModal(true);
       message.warning("Vui lòng nhập mã xác thực được gửi đến email của bạn");
       setLoadings((prevLoadings) => ({
@@ -186,7 +185,8 @@ const ResetPasswordForm = () => {
               },
               {
                 pattern: /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/,
-                message: "Mật khẩu không hợp lệ! Phải có ít nhất 8 ký tự, bao gồm một chữ hoa và một ký tự đặc biệt.",
+                message:
+                  "Mật khẩu không hợp lệ! Phải có ít nhất 8 ký tự, bao gồm một chữ hoa và một ký tự đặc biệt.",
               },
             ]}
           >
