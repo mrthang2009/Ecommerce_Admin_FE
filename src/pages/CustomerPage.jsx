@@ -1,6 +1,6 @@
 import axiosClient from "../libraries/axiosClient";
 import { useEffect, useState, useCallback } from "react";
-import {useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Divider,
   Card,
@@ -27,6 +27,7 @@ import styles from "./stylesPage/CustomerPage.module.scss";
 import numeral from "numeral";
 import "numeral/locales/vi";
 numeral.locale("vi");
+const DEFAULT_LIMIT = 10;
 const CustomerPage = () => {
   const navigate = useNavigate();
   //Trạng thái loading của button
@@ -80,12 +81,12 @@ const CustomerPage = () => {
   }, []);
   // Gọi hàm getCustomers khi component được render hoặc khi có thay đổi
   useEffect(() => {
-      getCustomers(pagination);
-      if (pagination.page === 1) {
-        navigate(`/customers`);
-      } else {
-        navigate(`/customers?page=${pagination.page}`);
-      }
+    getCustomers(pagination);
+    if (pagination.page === 1) {
+      navigate(`/customers`);
+    } else {
+      navigate(`/customers?page=${pagination.page}`);
+    }
   }, [navigate, pagination.page, pagination.pageSize]);
   // Hàm để xử lý khi tạo khách hàng mới
   // const handleCreate = async (values) => {
@@ -299,7 +300,7 @@ const CustomerPage = () => {
               emptyText: (
                 <span style={{ fontSize: "110%" }}>
                   <WarningOutlined style={{ color: "#FFC522" }} /> Không tìm
-                  thấy nhân viên khả dụng
+                  thấy khách hàng khả dụng
                 </span>
               ),
             }}
@@ -315,12 +316,13 @@ const CustomerPage = () => {
                 emptyText: <Spin size="large" />,
               }}
             />
-            {searchResult.length > 0 || customers.length === 0 ? null : (
+            {searchResult.length > 0 ||
+            pagination.total <= DEFAULT_LIMIT ? null : (
               <div className={styles.pagination}>
                 <Pagination
                   defaultCurrent={1}
                   total={pagination.total}
-                  pageSize={10}
+                  pageSize={DEFAULT_LIMIT}
                   current={pagination.page}
                   onChange={onChangePage}
                 />

@@ -101,7 +101,6 @@ const OrderMePage = ({ role }) => {
     }
   }, [navigate, pagination.page, pagination.pageSize]);
 
-
   const onChangePage = useCallback(
     (page, pageSize) => {
       setPagination((prev) => ({
@@ -449,7 +448,8 @@ const OrderMePage = ({ role }) => {
                 emptyText: <Spin size="large" />,
               }}
             />
-            {filterResult.length > 0 || orders.length === 0 ? null : (
+            {filterResult.length > 0 ||
+            pagination.total <= DEFAULT_LIMIT ? null : (
               <div className={styles.pagination}>
                 <Pagination
                   defaultCurrent={1}

@@ -405,7 +405,8 @@ const OrderPage = () => {
                 emptyText: <Spin size="large" />,
               }}
             />
-            {filterResult.length > 0 || orders.length === 0 ? null : (
+            {(filterResult.length > 0 && filterResult.length < DEFAULT_LIMIT) ||
+            orders.length < DEFAULT_LIMIT ? null : (
               <div className={styles.pagination}>
                 <Pagination
                   defaultCurrent={1}

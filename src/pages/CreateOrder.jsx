@@ -358,7 +358,8 @@ const ProductPage = () => {
                     </List.Item>
                   )}
                 />
-                {filterResult.length > 0 || products.length === 0 ? null : (
+                {filterResult.length > 0 ||
+                pagination.total <= DEFAULT_LIMIT ? null : (
                   <div className={styles.pagination}>
                     <Pagination
                       defaultCurrent={1}

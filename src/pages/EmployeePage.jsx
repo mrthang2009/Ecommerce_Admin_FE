@@ -1,6 +1,6 @@
 import axiosClient from "../libraries/axiosClient";
 import { useEffect, useState, useCallback } from "react";
-import {useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Card,
   Divider,
@@ -352,7 +352,8 @@ const EmployeePage = () => {
                 emptyText: <Spin size="large" />,
               }}
             />
-            {searchResult.length > 0 || employees.length === 0 ? null : (
+            {searchResult.length > 0 ||
+            pagination.total <= DEFAULT_LIMIT ? null : (
               <div className={styles.pagination}>
                 <Pagination
                   defaultCurrent={1}

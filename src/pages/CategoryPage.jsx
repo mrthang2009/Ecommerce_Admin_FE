@@ -306,7 +306,8 @@ const CategoryPage = () => {
                 emptyText: <Spin size="large" />,
               }}
             />
-            {searchResult.length > 0 || categories.length === 0 ? null : (
+            {searchResult.length > 0 ||
+            pagination.total <= DEFAULT_LIMIT ? null : (
               <div className={styles.pagination}>
                 <Pagination
                   defaultCurrent={1}
