@@ -34,39 +34,54 @@ const App = () => {
   // Hàm để giải mã token và thiết lập decodedPayload
 
   const getDecodedPayload = async () => {
+    // Kiểm tra xem đã có token và chưa giải mã token trước đó chưa
     if (token && !hasDecodedToken) {
       const decodedToken = decodeToken(token);
 
+      // Nếu giải mã thành công, cập nhật state và đánh dấu là đã giải mã token
       if (decodedToken) {
         setDecodedPayloadToken(decodedToken);
         setHasDecodedToken(true);
       }
+      // Kiểm tra xem token đã hết hạn chưa
       if (decodedToken.exp < Date.now() / 1000) {
-        // Sử dụng decodedToken.exp thay vì decodedPayloadToken.exp
+        // Nếu token hết hạn, kiểm tra xem có refreshToken không
+        localStorage.removeItem("TOKEN");
         if (!refreshToken) {
-          localStorage.removeItem("TOKEN");
+          // Nếu không có refreshToken, chuyển hướng đến trang đăng nhập
           navigate("/login");
           return;
         }
-        const decodedPayloadRefreshToken = decodeToken(refreshToken);
-        if (decodedPayloadRefreshToken.exp >= Date.now() / 1000) {
+        // Giải mã refreshToken
+        const decodedRefreshToken = decodeToken(refreshToken);
+
+        // Kiểm tra xem refreshToken có hợp lệ và không hết hạn không
+        if (decodedRefreshToken.exp >= Date.now() / 1000) {
           try {
-            const res = await axiosClient.post(`auth/refesh-token`, {
+            // Gửi request để lấy token mới bằng refreshToken
+            const res = await axiosClient.post(`auth/refresh-token`, {
               refreshToken,
             });
 
+            // Lấy token mới và lưu vào localStorage
             const newToken = res.data.token;
             localStorage.setItem("TOKEN", newToken);
+
+            // Cập nhật header cho axiosClient
             axiosClient.defaults.headers.Authorization = `Bearer ${newToken}`;
           } catch (error) {
             console.error("Error refreshing token:", error);
+            // Xử lý lỗi refresh token, có thể là chuyển hướng đến trang đăng nhập
+            navigate("/login");
           }
         } else {
+          // Nếu refreshToken không hợp lệ hoặc đã hết hạn, xóa cả refreshToken và token
           localStorage.removeItem("TOKEN");
           localStorage.removeItem("REFRESH_TOKEN");
           navigate("/login");
         }
       } else {
+        // Nếu token không hết hạn, cập nhật header cho axiosClient
         axiosClient.defaults.headers.Authorization = `Bearer ${token}`;
       }
     }
