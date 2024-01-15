@@ -93,7 +93,7 @@ const LoginForm = () => {
               },
             ]}
           >
-            <Input />
+            <Input placeholder="Nhập địa chỉ email của bạn" />
           </Form.Item>
 
           <Form.Item
@@ -107,7 +107,10 @@ const LoginForm = () => {
               },
             ]}
           >
-            <Input.Password autoComplete="new-password" />
+            <Input.Password
+              autoComplete="new-password"
+              placeholder="Nhập mật khẩu của bạn"
+            />
           </Form.Item>
           <a href="/forgot-password">Quên mật khẩu?</a>
 

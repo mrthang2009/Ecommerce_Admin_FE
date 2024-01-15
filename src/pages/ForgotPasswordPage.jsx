@@ -170,7 +170,7 @@ const ResetPasswordForm = () => {
               },
             ]}
           >
-            <Input />
+            <Input placeholder="Nhập địa chỉ email của bạn" />
           </Form.Item>
 
           <Form.Item
@@ -190,7 +190,7 @@ const ResetPasswordForm = () => {
               },
             ]}
           >
-            <Input.Password />
+            <Input.Password placeholder="Nhập mật khẩu của bạn" />
           </Form.Item>
           <Form.Item
             label="Xác nhận mật khẩu"
@@ -213,7 +213,7 @@ const ResetPasswordForm = () => {
               }),
             ]}
           >
-            <Input.Password />
+            <Input.Password placeholder="Xác nhận lại mật khẩu của bạn" />
           </Form.Item>
           <Form.Item>
             <Button
