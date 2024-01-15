@@ -1,4 +1,5 @@
 import { Form, Input, Button, message, Checkbox } from "antd";
+import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import axiosClient from "../libraries/axiosClient";
 import { useEffect } from "react";
@@ -8,6 +9,7 @@ import { Helmet } from "react-helmet";
 
 const LoginForm = () => {
   const [form] = Form.useForm();
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   //Trạng thái loading của button
   const [loadings, setLoadings] = useState([false]);
   const [isRememberMe, setIsRememberMe] = useState(false);
@@ -107,7 +109,22 @@ const LoginForm = () => {
               },
             ]}
           >
-            <Input.Password />
+            <Input
+              type={isPasswordVisible ? "text" : "password"}
+              autoComplete="new-password"
+              suffix={
+                <span
+                  onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+                  className={styles.passwordToggle}
+                >
+                  {isPasswordVisible ? (
+                    <EyeOutlined />
+                  ) : (
+                    <EyeInvisibleOutlined />
+                  )}
+                </span>
+              }
+            />
           </Form.Item>
           <a href="/forgot-password">Quên mật khẩu?</a>
 
