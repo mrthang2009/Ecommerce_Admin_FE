@@ -1,4 +1,5 @@
 import { Form, Input, Button, message, Checkbox } from "antd";
+import { EyeTwoTone, EyeInvisibleOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import axiosClient from "../libraries/axiosClient";
 import { useEffect } from "react";
@@ -103,7 +104,14 @@ const LoginForm = () => {
               },
             ]}
           >
-            <Input.Password />
+            <Input.Password iconRender={(visible) =>
+      visible ? (
+        <EyeTwoTone />
+      ) : (
+        <EyeInvisibleOutlined />
+      )
+    }
+    autoComplete="new-password"/>
           </Form.Item>
           <a href="/forgot-password">Quên mật khẩu?</a>
 
