@@ -1,5 +1,4 @@
 import { Form, Input, Button, message, Checkbox } from "antd";
-// import { EyeTwoTone, EyeInvisibleOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import axiosClient from "../libraries/axiosClient";
 import { useEffect } from "react";
@@ -73,6 +72,10 @@ const LoginForm = () => {
           }}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
+          onSubmit={(e) => {
+            e.preventDefault(); // Ngăn chặn sự kiện mặc định của form trình duyệt
+            form.submit();
+          }}
         >
           <Form.Item
             label="Email"
@@ -104,7 +107,7 @@ const LoginForm = () => {
               },
             ]}
           >
-            <Input />
+            <Input.Password />
           </Form.Item>
           <a href="/forgot-password">Quên mật khẩu?</a>
 
